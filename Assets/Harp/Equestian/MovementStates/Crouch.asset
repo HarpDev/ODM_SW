@@ -1,0 +1,30 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 79554b52645d5044181b1a58f52ff1e8, type: 3}
+  m_Name: Crouch
+  m_EditorClassIdentifier: 
+  CameraHeight: 1.5
+  BodyHeight: 1.7
+  Gravity: -30
+  ControlThreshold: 10
+  Speed: 0.3
+  GasSpeed: 0.8
+  WalkSpeed: 0.3
+  Drag: 14
+  JumpSpeed: 18
+  JumpBuffer: 0.1
+  StepHeight: 0.6
+  AirState: {fileID: 11400000, guid: 354a082a6bc46c241b2557133353c573, type: 2}
+  SlideState: {fileID: 11400000, guid: de9cd6cbdb0acac47825a08e9b6a07d0, type: 2}
+  CrouchState: {fileID: 11400000}
+  Dash: {fileID: 11400000, guid: c367dc943097de54b8b1ac9c47f8e580, type: 2}
+  ExitState: {fileID: 11400000, guid: 0c0f45316779dac40af3102b1e4d2975, type: 2}

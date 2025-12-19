@@ -1,0 +1,17 @@
+fileFormatVersion: 2
+guid: 159c5497fb69acf489168337a5d13a99
+ScriptedImporter:
+  internalIDToNameTable: []
+  externalObjects: {}
+  serializedVersion: 2
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+  script: {fileID: 11500000, guid: 60072b568d64c40a485e0fc55012dc9f, type: 3}
+AssetOrigin:
+  serializedVersion: 1
+  productId: 208988
+  packageName: ProtoGrid - Customizable Grid for Blockout (Full Support)
+  packageVersion: 2.0
+  assetPath: Assets/ProtoGrid/_COMMON_ProtoGrid/ProtoGrid_Common_SubGraphs/SubGraphPG_BackgroundTexture.shadersubgraph
+  uploadId: 538667

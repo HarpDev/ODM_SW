@@ -1,0 +1,14 @@
+fileFormatVersion: 2
+guid: 55e9c540741033a4c91fce3e0f13eb99
+PrefabImporter:
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 208988
+  packageName: ProtoGrid - Customizable Grid for Blockout (Full Support)
+  packageVersion: 2.0
+  assetPath: Assets/ProtoGrid/URP_ProtoGrid/URP_DemoScene/DemoScene_Meshes/Pilar_Example.prefab
+  uploadId: 538667

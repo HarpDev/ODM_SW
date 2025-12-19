@@ -1,0 +1,29 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bc706b94209e318459da5c4d92bed3bd, type: 3}
+  m_Name: Ground
+  m_EditorClassIdentifier: 
+  CameraHeight: 1.8
+  BodyHeight: 2
+  Gravity: -27.1
+  ControlThreshold: 10
+  Speed: 0.8
+  GasSpeed: 1.5
+  WalkSpeed: 0.5
+  Drag: 14
+  JumpSpeed: 17.7
+  JumpBuffer: 0.1
+  StepHeight: 0.7
+  AirState: {fileID: 11400000, guid: 354a082a6bc46c241b2557133353c573, type: 2}
+  SlideState: {fileID: 11400000, guid: de9cd6cbdb0acac47825a08e9b6a07d0, type: 2}
+  CrouchState: {fileID: 11400000, guid: 5b243ef2319bfd54982049046df9249e, type: 2}
+  Dash: {fileID: 11400000, guid: c367dc943097de54b8b1ac9c47f8e580, type: 2}

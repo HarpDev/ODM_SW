@@ -1,0 +1,14 @@
+fileFormatVersion: 2
+guid: bba3cca188502554a85613e51d71d4dd
+DefaultImporter:
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 208988
+  packageName: ProtoGrid - Customizable Grid for Blockout (Full Support)
+  packageVersion: 2.0
+  assetPath: Assets/ProtoGrid/URP_ProtoGrid/URP_DemoScene/URP_ProtoGrid_DemoScene.unity
+  uploadId: 538667

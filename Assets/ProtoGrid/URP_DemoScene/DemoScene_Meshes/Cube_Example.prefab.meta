@@ -1,0 +1,14 @@
+fileFormatVersion: 2
+guid: 64dfc01f7bd85cf40ad247c6c76eac0d
+PrefabImporter:
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 208988
+  packageName: ProtoGrid - Customizable Grid for Blockout (Full Support)
+  packageVersion: 2.0
+  assetPath: Assets/ProtoGrid/URP_ProtoGrid/URP_DemoScene/DemoScene_Meshes/Cube_Example.prefab
+  uploadId: 538667

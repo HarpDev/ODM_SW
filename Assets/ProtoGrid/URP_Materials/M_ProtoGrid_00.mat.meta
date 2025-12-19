@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 3554ded1130d5dc4da228645f175d579
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 2100000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 208988
+  packageName: ProtoGrid - Customizable Grid for Blockout (Full Support)
+  packageVersion: 2.0
+  assetPath: Assets/ProtoGrid/URP_ProtoGrid/URP_Materials/M_ProtoGrid_00.mat
+  uploadId: 538667
