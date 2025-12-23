@@ -10794,10 +10794,40 @@ PrefabInstance:
       propertyPath: <SightPoints>k__BackingField.Array.data[2]
       value: 
       objectReference: {fileID: 1093277691}
+    - target: {fileID: 2855315077506214822, guid: ffc8c02511d29c2448d67c71877b23b8,
+        type: 3}
+      propertyPath: maxYaw
+      value: 90
+      objectReference: {fileID: 0}
+    - target: {fileID: 2855315077506214822, guid: ffc8c02511d29c2448d67c71877b23b8,
+        type: 3}
+      propertyPath: maxPitch
+      value: 90
+      objectReference: {fileID: 0}
+    - target: {fileID: 2855315077506214822, guid: ffc8c02511d29c2448d67c71877b23b8,
+        type: 3}
+      propertyPath: rotationSpeed
+      value: 900
+      objectReference: {fileID: 0}
+    - target: {fileID: 2855315077506214822, guid: ffc8c02511d29c2448d67c71877b23b8,
+        type: 3}
+      propertyPath: LockOnXrotAdditive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2930669752287627983, guid: ffc8c02511d29c2448d67c71877b23b8,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 3657467904712375033, guid: ffc8c02511d29c2448d67c71877b23b8,
         type: 3}
       propertyPath: m_CullingMask.m_Bits
       value: 4294967295
+      objectReference: {fileID: 0}
+    - target: {fileID: 4915638793162513687, guid: ffc8c02511d29c2448d67c71877b23b8,
+        type: 3}
+      propertyPath: ReelOrbitLerp
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5568286825954922388, guid: ffc8c02511d29c2448d67c71877b23b8,
         type: 3}
@@ -10882,6 +10912,21 @@ PrefabInstance:
     - target: {fileID: 6015145079877806382, guid: ffc8c02511d29c2448d67c71877b23b8,
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8188489920820100204, guid: ffc8c02511d29c2448d67c71877b23b8,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8188489920820100204, guid: ffc8c02511d29c2448d67c71877b23b8,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 3.047
+      objectReference: {fileID: 0}
+    - target: {fileID: 8188489920820100204, guid: ffc8c02511d29c2448d67c71877b23b8,
+        type: 3}
+      propertyPath: m_LocalPosition.z
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8702946904137173983, guid: ffc8c02511d29c2448d67c71877b23b8,
