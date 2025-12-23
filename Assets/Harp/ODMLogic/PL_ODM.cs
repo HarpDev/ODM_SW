@@ -261,7 +261,7 @@ public class PL_ODM : MonoBehaviour
 
     void UpdateSpringSettings(int hookIndex)
     {
-        if (hooksReady[hookIndex] || !hookJoints[hookIndex])//this has been disabled. add a ! in front of "hooksready" to reenable logic
+        if (hooksReady[hookIndex] || !hookJoints[hookIndex])
         {
 
             return;
@@ -269,7 +269,7 @@ public class PL_ODM : MonoBehaviour
 
         if (Vector3.Distance(movementScript.Rigidbody.transform.position, hookSwingPoints[hookIndex]) >= 5f && !isReeling)
         {
-            //Debug.Log("CONVERTING");
+            
 
             hookJoints[hookIndex].tolerance = 0.025f;
             hookJoints[hookIndex].spring = MapToRange(movementScript.Rigidbody.velocity.sqrMagnitude, 1, 300, 7.5f, 20f);
@@ -280,7 +280,7 @@ public class PL_ODM : MonoBehaviour
         else
         {
 
-            Debug.Log("1");
+            //this was temporary physics logic no longer in use, kept for clarityx
             /*
             hookJoints[hookIndex].tolerance = 0.025f;
             hookJoints[hookIndex].spring = 20;
@@ -482,7 +482,7 @@ public class PL_ODM : MonoBehaviour
         currentGasAmount -= gasDashForce / 100;
         gasDashParticles.Emit(120);
         gasDashParticles.Play();
-        //gasDashAudioSource.Play();
+        gasDashAudioSource.Play();//this needs to be changed to a orbit sound effect instead of reusing reel boost
     }
     void PerformAirDash(Vector3 wishDir)
     {
@@ -523,9 +523,7 @@ public class PL_ODM : MonoBehaviour
         if (Input.GetKey(KeyCode.LeftShift) && movementScript.IsGrounded == false && !isReeling)
         {
             if (currentGasAmount < 0) return;
-            //UseGas(gasForce);
-            //movementScript.Rigidbody.AddForce(movementScript.Rigidbody.transform.up * 0.09f, ForceMode.VelocityChange);
-            // movementScript.Rigidbody.AddForce(playerCameraTransform.transform.forward* 0.03f, ForceMode.VelocityChange);
+            
         }
         else if (isUsingGas)
         {
@@ -533,7 +531,7 @@ public class PL_ODM : MonoBehaviour
             isUsingGas = false;
         }
         // Hook reeling
-        if (isProperlyHooked == true)//previously checked if orbiting was false
+        if (isProperlyHooked == true)
         {
 
             if (hookJoints[0])
@@ -563,11 +561,10 @@ public class PL_ODM : MonoBehaviour
         if (isReeling == true)
         {
 
-            //if grounded, force slide state
+            //if grounded and reeling, force slide state
             if (movementScript.IsGrounded == true)
             {
                 movementScript.Rigidbody.AddForce(movementScript.Rigidbody.transform.up * gasDashForce * 0.5f, ForceMode.Force);
-
             }
 
             float targetReelInForce;
@@ -582,7 +579,7 @@ public class PL_ODM : MonoBehaviour
             }
             hookCurrentReelInForce = targetReelInForce;
             if (currentGasAmount <= 0) return;
-            Vector3 previousVelocity = movementScript.Rigidbody.velocity; // Store current velocity
+            Vector3 previousVelocity = movementScript.Rigidbody.velocity; //store current velocity
             if (!isReeling)
             {
 
@@ -593,7 +590,7 @@ public class PL_ODM : MonoBehaviour
             float targetMaxDistance = Mathf.Max(0.1f, distanceFromPoint * 0.7f);
             if (distanceFromPoint > 0.0f)
             {
-                //VELOCITY LERP
+                //This handles the players vertical and horizontal velocity change upon entering a new reel from previous velocity
                 divider = Mathf.Lerp(divider, PL_ResourceManagement.MapToRange(distanceFromPoint, 0, hookMaxDistance, 0.1f, 0.01f), Time.deltaTime * 4f);
                 Vector3 reelForceBasedOnDistance = (hookSwingPoints[hookIndex] - transform.position).normalized * (hookCurrentReelInForce * divider);
                 Vector3 newVelocity = Vector3.Lerp(previousVelocity, reelForceBasedOnDistance, Time.deltaTime * ReelVelocityLerp); // Smoothly transition[The greater the f value the stronger the lerp]
