@@ -149,6 +149,11 @@ namespace Player.Movement
         {
             CameraHeight = Mathf.SmoothDamp(CameraHeight, TargetCameraHeight, ref cameraVel, CameraSmoothTime);
             CurrentState.InputUpdate(this);
+
+            if (Input.GetMouseButtonDown(1))
+            {
+                StartCoroutine(HandleAiming());
+            }
         }
         private void FixedUpdate()
         {
@@ -267,6 +272,39 @@ namespace Player.Movement
                                 Rigidbody.MoveRotation(Quaternion.Slerp(Rigidbody.rotation, targetRot, RotationSpeed * Time.fixedDeltaTime));
             }
            
+        }
+
+        private IEnumerator HandleAiming()
+        {
+            while (Input.GetMouseButton(1))
+            {
+                if (Camera == null || ODM.isReeling)
+                {
+                    yield return new WaitForFixedUpdate();
+                    continue;
+                }
+
+                // Face the camera's forward direction (flattened to horizontal plane)
+                Vector3 camForward = Camera.forward;
+                camForward.y = 0f;
+                camForward.Normalize();
+
+                if (camForward.magnitude < 0.01f)
+                {
+                    yield return new WaitForFixedUpdate();
+                    continue;
+                }
+
+                Quaternion targetRot = Quaternion.LookRotation(camForward, Vector3.up);
+
+                // Slerp to target rotation (use a higher speed for quicker snapping during aiming)
+                float aimingRotationSpeed = RotationSpeed * 2f; // Adjust multiplier as needed for responsiveness
+                Rigidbody.MoveRotation(Quaternion.Slerp(Rigidbody.rotation, targetRot, aimingRotationSpeed * Time.fixedDeltaTime));
+
+                // Movement remains relative to camera (as handled by GetWishDir())
+
+                yield return new WaitForFixedUpdate(); // Sync with physics updates
+            }
         }
     }
 }
