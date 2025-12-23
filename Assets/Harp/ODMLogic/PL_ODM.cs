@@ -244,7 +244,7 @@ public class PL_ODM : MonoBehaviour
 
     public static float MapToRange(float value, float minInput, float maxInput, float minOutput, float maxOutput)
     {
-        Debug.Log("CONVERTING");
+        //Debug.Log("CONVERTING");
         // Ensure the value is clamped within the input range
         value = Mathf.Clamp(value, minInput, maxInput);
         // Calculate the ratio of the value's position within the input range
@@ -269,7 +269,7 @@ public class PL_ODM : MonoBehaviour
 
         if (Vector3.Distance(movementScript.Rigidbody.transform.position, hookSwingPoints[hookIndex]) >= 5f && !isReeling)
         {
-            Debug.Log("CONVERTING");
+            //Debug.Log("CONVERTING");
 
             hookJoints[hookIndex].tolerance = 0.025f;
             hookJoints[hookIndex].spring = MapToRange(movementScript.Rigidbody.velocity.sqrMagnitude, 1, 300, 7.5f, 20f);
