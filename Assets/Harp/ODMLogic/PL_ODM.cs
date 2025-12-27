@@ -482,7 +482,7 @@ public class PL_ODM : MonoBehaviour
         currentGasAmount -= gasDashForce / 100;
         gasDashParticles.Emit(120);
         gasDashParticles.Play();
-        gasDashAudioSource.Play();//this needs to be changed to a orbit sound effect instead of reusing reel boost
+        //gasDashAudioSource.Play();//this needs to be changed to a orbit sound effect instead of reusing reel boost
     }
     void PerformAirDash(Vector3 wishDir)
     {
@@ -844,7 +844,7 @@ public class PL_ODM : MonoBehaviour
         if (flatDir.magnitude < 0.1f) return; // Too close or vertical, skip
 
         Quaternion targetRot = Quaternion.LookRotation(flatDir, Vector3.up);
-        movementScript.Rigidbody.MoveRotation(Quaternion.Slerp(movementScript.Rigidbody.rotation, targetRot, movementScript.RotationSpeed * Time.fixedDeltaTime));
+        movementScript.Rigidbody.MoveRotation(Quaternion.Slerp(movementScript.Rigidbody.rotation, targetRot, movementScript.GroundRotationSpeed * Time.fixedDeltaTime));
     }
 
 
