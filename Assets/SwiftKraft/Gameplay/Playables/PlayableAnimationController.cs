@@ -9,7 +9,7 @@ namespace SwiftKraft.Gameplay.Playables
 {
     public class PlayableAnimationController : MonoBehaviour
     {
-        public readonly List<PlayableAnimationLayer> Layers = new();
+        public List<PlayableAnimationLayer> Layers = new();
 
         public AnimationLayerMixerPlayable Mixer { get; private set; }
 
@@ -19,6 +19,10 @@ namespace SwiftKraft.Gameplay.Playables
         {
             Graph = PlayableGraph.Create(gameObject.name);
             Mixer = AnimationLayerMixerPlayable.Create(Graph, Layers.Count); // make addlayer methods, and apply avatarmask and weights.
+
+            foreach (var layer in Layers)
+                InitializeLayer(layer);
+
             Graph.SetTimeUpdateMode(DirectorUpdateMode.Manual);
             Graph.Play();
         }
@@ -26,7 +30,7 @@ namespace SwiftKraft.Gameplay.Playables
         private void Update()
         {
             for (int i = 0; i < Layers.Count; i++)
-                Layers[i].Update();
+                Layers[i]?.Update();
 
             Graph.Evaluate(Time.deltaTime);
         }
@@ -37,12 +41,45 @@ namespace SwiftKraft.Gameplay.Playables
             Graph.Destroy();
         }
 
+        public void InitializeLayer(PlayableAnimationLayer layer)
+        {
+            layer.Initialize(Graph);
+            Mixer.AddInput(layer.Mixer, 0, 1f);
+            Mixer.SetLayerMaskFromAvatarMask((uint)(Layers.Count - 1), layer.Mask);
+        }
+
         public void AddLayer(PlayableAnimationLayer layer)
         {
             if (Layers.Contains(layer))
                 return;
 
+            Layers.Add(layer);
+            InitializeLayer(layer);
+        }
 
+        public void RemoveLayer(PlayableAnimationLayer layer)
+        {
+            int index = Layers.IndexOf(layer);
+
+            if (index < 0)
+                return;
+
+            Mixer.DisconnectInput(index);
+            Layers.RemoveAt(index);
+
+            RebuildMixer();
+        }
+
+        public void RebuildMixer()
+        {
+            AnimationLayerMixerPlayable newMixer = AnimationLayerMixerPlayable.Create(Graph, Layers.Count);
+            for (int i = 0; i < Layers.Count; i++)
+            {
+                newMixer.ConnectInput(i, Layers[i].Mixer, 0);
+                newMixer.SetInputWeight(i, 1f);
+                newMixer.SetLayerMaskFromAvatarMask((uint)i, Layers[i].Mask);
+            }
+            Mixer = newMixer;
         }
     }
 
@@ -70,10 +107,10 @@ namespace SwiftKraft.Gameplay.Playables
                     currentState.Initialize(Graph);
             }
         }
-        public PlayableAnimationState NextState
+        public PlayableAnimationState NextState // rework to use a list of states for more complex blending
         {
             get => nextState;
-            set
+            private set
             {
                 nextState = value;
 
@@ -104,6 +141,14 @@ namespace SwiftKraft.Gameplay.Playables
         {
             Graph = graph;
             Mixer = AnimationMixerPlayable.Create(graph, 2);
+        }
+
+        public void Play(PlayableAnimationState state)
+        {
+            if (state == null)
+                return;
+
+            NextState = state;
         }
 
         public void Update()
@@ -137,7 +182,7 @@ namespace SwiftKraft.Gameplay.Playables
     [Serializable]
     public class PlayableAnimationState
     {
-        public PlayableAnimation[] Animations;
+        public List<PlayableAnimation> Animations;
         public float[] BlendFloat;
         public bool Initialized { get; private set; }
 
@@ -147,10 +192,10 @@ namespace SwiftKraft.Gameplay.Playables
 
         public void Initialize(PlayableGraph graph)
         {
-            weights = new float[Animations.Length];
-            Mixer = AnimationMixerPlayable.Create(graph, Animations.Length);
+            weights = new float[Animations.Count];
+            Mixer = AnimationMixerPlayable.Create(graph, Animations.Count);
 
-            for (int i = 0; i < Animations.Length; i++)
+            for (int i = 0; i < Animations.Count; i++)
             {
                 Animations[i].Clip = AnimationClipPlayable.Create(graph, Animations[i].OriginalClip);
                 Mixer.ConnectInput(i, Animations[i].Clip, 0);
@@ -178,9 +223,9 @@ namespace SwiftKraft.Gameplay.Playables
 
     public static class BlendTreeUtility
     {
-        public static void BlendWeights(PlayableAnimation[] nodes, float[] input, ref float[] w)
+        public static void BlendWeights(IList<PlayableAnimation> nodes, float[] input, ref float[] w)
         {
-            int count = nodes.Length;
+            int count = nodes.Count;
 
             if (w == null || w.Length != count)
                 w = new float[count];
