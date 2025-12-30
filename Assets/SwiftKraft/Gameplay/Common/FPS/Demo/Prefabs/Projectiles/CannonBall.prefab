@@ -44,9 +44,9 @@ Light:
   serializedVersion: 10
   m_Type: 2
   m_Shape: 0
-  m_Color: {r: 0, g: 1, b: 1, a: 1}
-  m_Intensity: 10
-  m_Range: 10
+  m_Color: {r: 1, g: 0.9093014, b: 0, a: 1}
+  m_Intensity: 7.87
+  m_Range: 2.99
   m_SpotAngle: 30
   m_InnerSpotAngle: 21.80208
   m_CookieSize: 10
@@ -184,7 +184,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 33f367756ea5c35489eb84c6deffabd7, type: 2}
+  - {fileID: 2100000, guid: 5922c8a52ee1f3d418b2166ec0f4c706, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -269,9 +269,9 @@ MonoBehaviour:
   Lifetime:
     StartEnded: 0
     <MaxValue>k__BackingField: 10
-  Speed: {x: 0, y: 0, z: 180}
+  Speed: {x: 0, y: 0, z: 70}
   Bounces: 0
-  ConstantMotion: 0
+  ConstantMotion: 1
 --- !u!114 &5355334453604286858
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -287,5 +287,5 @@ MonoBehaviour:
   Spawners:
   - <Weight>k__BackingField: 0
     Spawnees:
-    - {fileID: 6046608371098655565, guid: 9e4083a4f6869b441bd804203c76c5af, type: 3}
+    - {fileID: 6046608371098655565, guid: 0f1643a76466691479c9e7d795bc8882, type: 3}
   InHierarchy: 1

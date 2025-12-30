@@ -15,5 +15,5 @@ MonoBehaviour:
   ID: ProtoBullpup
   WorldPrefab: {fileID: 5852272558835464859, guid: d85a2e5948eb68e4aafb103b30219ed3,
     type: 3}
-  EquippedPrefab: {fileID: 2243808998322166224, guid: 4511d44afed61cb43b42fdbabf5b1ae2,
+  EquippedPrefab: {fileID: 6411352932588748021, guid: 0ad3db9653014fe439d4a62b9e3f27b4,
     type: 3}
