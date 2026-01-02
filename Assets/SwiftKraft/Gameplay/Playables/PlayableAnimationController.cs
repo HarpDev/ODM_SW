@@ -7,21 +7,32 @@ using UnityEngine.Playables;
 
 namespace SwiftKraft.Gameplay.Playables
 {
+    [RequireComponent(typeof(Animator))]
     public class PlayableAnimationController : MonoBehaviour
     {
+        public int AnimatorLayerIndex = 0;
         public List<PlayableAnimationLayer> Layers = new();
+        public Animator Animator { get; private set; }
 
+        public AnimatorControllerPlayable AnimatorControllerPlayable { get; private set; }
         public AnimationLayerMixerPlayable Mixer { get; private set; }
-
+        public AnimationPlayableOutput Output { get; private set; }
         public PlayableGraph Graph { get; set; }
 
         private void Awake()
         {
+            Animator = GetComponent<Animator>();
             Graph = PlayableGraph.Create(gameObject.name);
-            Mixer = AnimationLayerMixerPlayable.Create(Graph, Layers.Count); // make addlayer methods, and apply avatarmask and weights.
+            Output = AnimationPlayableOutput.Create(Graph, "Animation", Animator);
+            Mixer = AnimationLayerMixerPlayable.Create(Graph, Layers.Count);
 
             foreach (var layer in Layers)
                 InitializeLayer(layer);
+
+            if (Layers.InRange(AnimatorLayerIndex))
+                AnimatorControllerPlayable = AnimatorControllerPlayable.Create(Graph, Animator.runtimeAnimatorController);
+
+            Output.SetSourcePlayable(Mixer);
 
             Graph.SetTimeUpdateMode(DirectorUpdateMode.Manual);
             Graph.Play();
@@ -43,7 +54,7 @@ namespace SwiftKraft.Gameplay.Playables
 
         public void InitializeLayer(PlayableAnimationLayer layer)
         {
-            layer.Initialize(Graph);
+            layer.Initialize(this);
             Mixer.AddInput(layer.Mixer, 0, 1f);
             if (layer.Mask != null)
                 Mixer.SetLayerMaskFromAvatarMask((uint)(Layers.Count - 1), layer.Mask);
@@ -104,14 +115,15 @@ namespace SwiftKraft.Gameplay.Playables
             {
                 currentState = value;
 
-                Mixer.DisconnectInput(0);
+                Graph.Disconnect(Mixer, 0);
+
                 if (currentState == null)
                     return;
 
-                Mixer.ConnectInput(0, currentState.Mixer, 0);
-
                 if (!currentState.Initialized)
-                    currentState.Initialize(Graph);
+                    currentState.Initialize(this);
+
+                Graph.Connect(currentState.Mixer, 0, Mixer, 0);
             }
         }
         public PlayableAnimationState NextState // rework to use a list of states for more complex blending
@@ -121,7 +133,7 @@ namespace SwiftKraft.Gameplay.Playables
             {
                 nextState = value;
 
-                Mixer.DisconnectInput(1);
+                Graph.Disconnect(Mixer, 1);
 
                 if (nextState == null)
                 {
@@ -130,14 +142,16 @@ namespace SwiftKraft.Gameplay.Playables
                     return;
                 }
 
-                Mixer.ConnectInput(1, nextState.Mixer, 0);
-
                 if (!nextState.Initialized)
-                    nextState.Initialize(Graph);
+                    nextState.Initialize(this);
+
+                Graph.Connect(nextState.Mixer, 0, Mixer, 1);
             }
         }
         private PlayableAnimationState currentState;
         private PlayableAnimationState nextState;
+
+        public PlayableAnimationController Controller { get; private set; }
 
         public PlayableGraph Graph { get; private set; }
 
@@ -145,10 +159,11 @@ namespace SwiftKraft.Gameplay.Playables
 
         public readonly Timer Transition = new(0.1f);
 
-        public void Initialize(PlayableGraph graph)
+        public void Initialize(PlayableAnimationController graph)
         {
-            Graph = graph;
-            Mixer = AnimationMixerPlayable.Create(graph, 2);
+            Controller = graph;
+            Graph = graph.Graph;
+            Mixer = AnimationMixerPlayable.Create(graph.Graph, 2);
         }
 
         public void Play(PlayableAnimationState state)
@@ -178,8 +193,9 @@ namespace SwiftKraft.Gameplay.Playables
 
             if (Transition.Ended)
             {
-                CurrentState = NextState;
+                PlayableAnimationState temp = NextState;
                 NextState = null;
+                CurrentState = temp;
             }
             else
             {
@@ -194,22 +210,25 @@ namespace SwiftKraft.Gameplay.Playables
     public class PlayableAnimationState
     {
         public List<PlayableAnimation> Animations;
-        public float[] BlendFloat;
+        public Vector2 BlendPosition;
         public bool Initialized { get; private set; }
+
+        public PlayableAnimationLayer Layer { get; private set; }
 
         public AnimationMixerPlayable Mixer { get; private set; }
 
         float[] weights;
 
-        public void Initialize(PlayableGraph graph)
+        public void Initialize(PlayableAnimationLayer graph)
         {
+            Layer = graph;
             weights = new float[Animations.Count];
-            Mixer = AnimationMixerPlayable.Create(graph, Animations.Count);
+            Mixer = AnimationMixerPlayable.Create(Layer.Graph, Animations.Count);
 
             for (int i = 0; i < Animations.Count; i++)
             {
-                Animations[i].Clip = AnimationClipPlayable.Create(graph, Animations[i].OriginalClip);
-                Mixer.ConnectInput(i, Animations[i].Clip, 0);
+                Animations[i].Clip = AnimationClipPlayable.Create(Layer.Graph, Animations[i].OriginalClip);
+                Layer.Graph.Connect(Animations[i].Clip, 0, Mixer, i);
                 Mixer.SetInputWeight(i, 0f);
             }
 
@@ -218,7 +237,7 @@ namespace SwiftKraft.Gameplay.Playables
 
         public void Update()
         {
-            BlendTreeUtility.BlendWeights(Animations, BlendFloat, ref weights);
+            BlendTreeUtility.Blend2D(Animations, BlendPosition, ref weights);
             for (int i = 0; i < weights.Length; i++)
                 Mixer.SetInputWeight(i, weights[i]);
         }
@@ -228,75 +247,33 @@ namespace SwiftKraft.Gameplay.Playables
     public class PlayableAnimation
     {
         public AnimationClip OriginalClip;
+        [NonSerialized]
         public AnimationClipPlayable Clip;
-        public float[] Position;
+        public Vector2 Position;
     }
 
     public static class BlendTreeUtility
     {
-        public static void BlendWeights(IList<PlayableAnimation> nodes, float[] input, ref float[] w)
+        public static void Blend2D(
+            List<PlayableAnimation> animations,
+            Vector2 blendPos,
+            ref float[] weights)
         {
-            int count = nodes.Count;
-
-            if (w == null || w.Length != count)
-                w = new float[count];
-
-            // Fallback if input is missing
-            if (input == null || input.Length == 0)
-            {
-                float even = 1f / count;
-                for (int i = 0; i < count; i++)
-                    w[i] = even;
-                return;
-            }
-
             float total = 0f;
 
-            for (int i = 0; i < count; i++)
+            for (int i = 0; i < animations.Count; i++)
             {
-                float distSqr = DistanceSqr(nodes[i].Position, input);
-
-                if (distSqr < 0.000001f)
-                {
-                    for (int j = 0; j < count; j++)
-                        w[j] = (i == j ? 1f : 0f);
-                    return;
-                }
-
-                float inv = 1f / distSqr;
-                w[i] = inv;
-                total += inv;
+                float dist = Vector2.Distance(blendPos, animations[i].Position);
+                float w = 1f / Mathf.Max(dist, 0.0001f);
+                weights[i] = w;
+                total += w;
             }
 
-            float invTotal = 1f / total;
-            for (int i = 0; i < count; i++)
-                w[i] *= invTotal;
-        }
+            if (total <= 0f)
+                return;
 
-        private static float DistanceSqr(float[] a, float[] b)
-        {
-            int dims = Mathf.Min(a.Length, b.Length);
-            float sum = 0f;
-
-            for (int i = 0; i < dims; i++)
-            {
-                float d = a[i] - b[i];
-                sum += d * d;
-            }
-
-            // Handle extra dimensions
-            if (b.Length > a.Length)
-            {
-                for (int i = dims; i < b.Length; i++)
-                    sum += b[i] * b[i];
-            }
-            else if (a.Length > b.Length)
-            {
-                for (int i = dims; i < a.Length; i++)
-                    sum += a[i] * a[i];
-            }
-
-            return sum;
+            for (int i = 0; i < weights.Length; i++)
+                weights[i] /= total;
         }
     }
 }
