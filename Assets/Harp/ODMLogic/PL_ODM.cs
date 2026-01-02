@@ -302,6 +302,35 @@ public class PL_ODM : MonoBehaviour
 
     void CheckInputUpdate()
     {
+
+        // Adjust separation
+        if (Input.GetAxis("Mouse ScrollWheel") > 0f)
+        {
+            separation = Mathf.Clamp(separation + 0.1f, 0f, 1f);
+        }
+        else if (Input.GetAxis("Mouse ScrollWheel") < 0f)
+        {
+            separation = Mathf.Clamp(separation - 0.1f, 0f, 1f);
+        }
+        // Smooth separation
+        if (currentSeparation < 0.9f)
+        {
+            currentSeparation = Mathf.Lerp(currentSeparation, separation, 8 * Time.deltaTime);
+        }
+        else if (currentSeparation > 0.1f)
+        {
+            currentSeparation = Mathf.Lerp(currentSeparation, separation, 8 * Time.deltaTime);
+        }
+        else if (currentSeparation >= 0.9f)
+        {
+            currentSeparation = 1;
+        }
+        else if (currentSeparation <= 0.1f)
+        {
+            currentSeparation = 0;
+        }
+
+
         // Hook fire detection
         if (Input.GetKeyDown(KeyCode.Q) && hookCooldownTimes[0] <= 0 && hooksReady[0] && hookPredictionHits[0].point != Vector3.zero && currentGasAmount > 0)
         {
@@ -375,32 +404,7 @@ public class PL_ODM : MonoBehaviour
         else
             return;
 
-        // Adjust separation
-        if (Input.GetAxis("Mouse ScrollWheel") > 0f)
-        {
-            separation = Mathf.Clamp(separation + 0.1f, 0f, 1f);
-        }
-        else if (Input.GetAxis("Mouse ScrollWheel") < 0f)
-        {
-            separation = Mathf.Clamp(separation - 0.1f, 0f, 1f);
-        }
-        // Smooth separation
-        if (currentSeparation < 0.9f)
-        {
-            currentSeparation = Mathf.Lerp(currentSeparation, separation, 8 * Time.deltaTime);
-        }
-        else if (currentSeparation > 0.1f)
-        {
-            currentSeparation = Mathf.Lerp(currentSeparation, separation, 8 * Time.deltaTime);
-        }
-        else if (currentSeparation >= 0.9f)
-        {
-            currentSeparation = 1;
-        }
-        else if (currentSeparation <= 0.1f)
-        {
-            currentSeparation = 0;
-        }
+       
     }
 
     // =====================================================================================
