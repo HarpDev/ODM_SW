@@ -4363,7 +4363,7 @@ GameObject:
   - component: {fileID: 2584018220074836143}
   - component: {fileID: 1098259891708741795}
   m_Layer: 6
-  m_Name: ProtoPistolProjectile
+  m_Name: ProtoPistolProjectile_Player
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -4469,7 +4469,7 @@ MonoBehaviour:
       m_PersistentCalls:
         m_Calls: []
     BaseDamage: 25
-    ProjectilePrefab: {fileID: 7389480120932224565, guid: b89fe449e7db5964fb01274c55714e19,
+    ProjectilePrefab: {fileID: 161029702014116550, guid: a333fb38178fe884b86e1a33bcc96e38,
       type: 3}
     ShootPoint: {fileID: 2970867613494433255}
     QueueTime: 0.2

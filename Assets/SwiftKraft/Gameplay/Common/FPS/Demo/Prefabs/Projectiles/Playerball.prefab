@@ -218,7 +218,7 @@ GameObject:
   - component: {fileID: 3399438743193937935}
   - component: {fileID: 5355334453604286858}
   m_Layer: 7
-  m_Name: CannonBall
+  m_Name: Playerball
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -234,7 +234,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.6, y: 0.6, z: 0.6}
+  m_LocalScale: {x: 0.39847204, y: 0.12589325, z: 0.12382119}
   m_ConstrainProportionsScale: 1
   m_Children:
   - {fileID: 9041477086930306440}
@@ -354,7 +354,7 @@ MonoBehaviour:
   Lifetime:
     StartEnded: 0
     <MaxValue>k__BackingField: 10
-  Speed: {x: 0, y: 0, z: 50}
+  Speed: {x: 0, y: 0, z: 2000}
   Bounces: 0
   ConstantMotion: 1
 --- !u!114 &5355334453604286858
@@ -402,7 +402,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.225995, y: 0.225995, z: 0.225995}
+  m_LocalScale: {x: 0.225995, y: 0.55043346, z: 0.225995}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 3308029890810433012}
