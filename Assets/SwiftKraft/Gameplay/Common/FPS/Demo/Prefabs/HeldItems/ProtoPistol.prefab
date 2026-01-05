@@ -1451,7 +1451,7 @@ AudioSource:
   m_Enabled: 1
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
-  m_audioClip: {fileID: 0}
+  m_audioClip: {fileID: 8300000, guid: 764df0263502a6747b92c795751660ac, type: 3}
   m_PlayOnAwake: 0
   m_Volume: 1
   m_Pitch: 1
@@ -3557,7 +3557,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &8800210859008380305
 Transform:
   m_ObjectHideFlags: 0
@@ -4563,7 +4563,7 @@ MonoBehaviour:
       AmmoCount: 0
   <Automatic>k__BackingField: 0
   <BulletCount>k__BackingField: 1
-  <MaxAmmo>k__BackingField: 30
+  <MaxAmmo>k__BackingField: 45
   CameraFOV: 70
   ViewModelFOV: 45
   AimSpreadMultiplier: 0.075
