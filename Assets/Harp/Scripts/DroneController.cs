@@ -52,11 +52,11 @@ public class DroneController : MonoBehaviour
     {
         if (enableSideSwitching)
         {
-            if (Input.GetKeyDown(KeyCode.Q))
+            if (Input.GetKeyDown(KeyCode.E))
             {
                 flankSide = FlankSide.Left;
             }
-            if (Input.GetKeyDown(KeyCode.E))
+            if (Input.GetKeyDown(KeyCode.Q))
             {
                 flankSide = FlankSide.Right;
             }

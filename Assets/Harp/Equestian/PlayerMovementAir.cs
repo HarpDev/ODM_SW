@@ -45,7 +45,7 @@ namespace Player.Movement
 
             airTime = 0f;
             currentCoyote = 0f;
-            doubleJumpBuffer = 1.0f;
+            doubleJumpBuffer = 0.0f;
 
             
 
@@ -85,11 +85,11 @@ namespace Player.Movement
         {
             base.InputUpdate(parent);
 
-            if (Input.GetKeyDown(KeyCode.Space))
+            /*if (Input.GetKeyDown(KeyCode.Space))
             {
                 doubleJumpBuffer = JumpBuffer;
                 
-            }
+            }*/
 
             
 

@@ -379,7 +379,7 @@ MonoBehaviour:
   strength: 800
   waveHeight: 20
   damper: 14
-  waveCount: 235
+  waveCount: 40
   quality: 100
   effectCurve:
     serializedVersion: 2
@@ -394,8 +394,8 @@ MonoBehaviour:
       inWeight: 0
       outWeight: 0.029166667
     - serializedVersion: 3
-      time: 0.1499939
-      value: -0.0029754639
+      time: 0.13287354
+      value: 0.043167114
       inSlope: -5.069475
       outSlope: -5.069475
       tangentMode: 0
@@ -5938,7 +5938,7 @@ MonoBehaviour:
   strength: 800
   waveHeight: 20
   damper: 14
-  waveCount: 235
+  waveCount: 40
   quality: 100
   effectCurve:
     serializedVersion: 2
@@ -5953,8 +5953,8 @@ MonoBehaviour:
       inWeight: 0
       outWeight: 0.029166667
     - serializedVersion: 3
-      time: 0.1499939
-      value: -0.0029754639
+      time: 0.13287354
+      value: 0.043167114
       inSlope: -5.069475
       outSlope: -5.069475
       tangentMode: 0
@@ -7241,7 +7241,7 @@ MonoBehaviour:
   obstacleLayer:
     serializedVersion: 2
     m_Bits: 1
-  avoidanceRadius: 2
+  avoidanceRadius: 3
   avoidanceStrength: 5
   rotationSpeed: 50
   enableSideSwitching: 1
