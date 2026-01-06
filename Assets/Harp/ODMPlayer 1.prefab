@@ -266,7 +266,7 @@ LineRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: -9003920172004352368, guid: 5c5f5bcbf6ece794480ef88bf1fc2ad3, type: 3}
+  - {fileID: 2100000, guid: 61441c7dde323014d922f7357c936de6, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -5825,7 +5825,7 @@ LineRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: -9003920172004352368, guid: 5c5f5bcbf6ece794480ef88bf1fc2ad3, type: 3}
+  - {fileID: 2100000, guid: 61441c7dde323014d922f7357c936de6, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -6201,7 +6201,7 @@ MonoBehaviour:
   lineRenderer: {fileID: 2032582949090719732}
   meshRenderer: {fileID: 5030014118745946585}
   plight: {fileID: 4170994691585266406}
-  laserColor: {r: 0, g: 1, b: 0.90622044, a: 1}
+  laserColor: {r: 1, g: 0.43632746, b: 0, a: 1}
   mask:
     serializedVersion: 2
     m_Bits: 2049
@@ -6453,7 +6453,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1897799069575238834}
   serializedVersion: 2
-  m_LocalRotation: {x: -0.10105626, y: 0, z: 0, w: 0.99488074}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 1
@@ -6461,7 +6461,7 @@ Transform:
   - {fileID: 1468077733894246076}
   - {fileID: 9048351369693731321}
   m_Father: {fileID: 3725211195260193925}
-  m_LocalEulerAnglesHint: {x: -11.6, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1904537540416309649
 GameObject:
   m_ObjectHideFlags: 0
@@ -9569,7 +9569,7 @@ Transform:
   m_GameObject: {fileID: 4994826436477675899}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 1.8, z: 0}
+  m_LocalPosition: {x: -2.39, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 1
   m_Children:
@@ -11105,8 +11105,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 33d31f9ceb2e6714fad5c810e3716e3f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playerCamera: {fileID: 5011468201530433333}
+  playerCamera: {fileID: 4815051217769872809}
   cameraPivot: {fileID: 5123416960364606567}
+  ODM: {fileID: 0}
   distance: 7
   height: 0.5
   minPitch: -60.6
@@ -12164,7 +12165,7 @@ Transform:
   m_GameObject: {fileID: 7652482262690197794}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 2.3360097, y: 3.9700005, z: -1.8823104}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 1
   m_Children: []
@@ -12202,7 +12203,7 @@ Camera:
     width: 1
     height: 1
   near clip plane: 0.1
-  far clip plane: 5000
+  far clip plane: 8000
   field of view: 70
   orthographic: 0
   orthographic size: 10
@@ -12415,7 +12416,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0, g: 1, b: 0.9800041, a: 1}
+  m_Color: {r: 1, g: 0.48083812, b: 0, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -18390,7 +18391,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0, g: 1, b: 0.9800041, a: 1}
+  m_Color: {r: 1, g: 0.48083812, b: 0, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1

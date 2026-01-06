@@ -12,8 +12,9 @@ namespace Player.Movement
         public static readonly List<OverrideLayer> Overrides = new();
 
         [Header("References")]
-        public Camera playerCamera;              // main camera used for world rendering
-        public Transform cameraPivot;            // transform placed at shoulder/head height on the player (target to orbit around)
+        public Transform playerCamera;              // switched to referencing transform instead of player camera 1/6/26
+        public Transform cameraPivot;
+        public PL_ODM ODM; // this is needed as most camera tilt effects are based on ODM traversal
 
         [Header("Orbit Settings")]
         public float distance = 3.5f;
@@ -33,13 +34,11 @@ namespace Player.Movement
         float yawVel;
         float currSens;
 
-        // convenience accessor to be used by movement code
-        public Camera playerCam => playerCamera;
+      
 
         private void Awake()
         {
-            if (playerCamera == null && Camera.main != null)
-                playerCamera = Camera.main;
+           
 
             currSens = Sensitivity;
             if (lockCursor)
