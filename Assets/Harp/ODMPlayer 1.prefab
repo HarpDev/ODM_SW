@@ -11107,7 +11107,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playerCamera: {fileID: 4815051217769872809}
   cameraPivot: {fileID: 5123416960364606567}
-  ODM: {fileID: 0}
+  ODM: {fileID: 4358297870060580774}
+  player: {fileID: 8357671278190338441}
   distance: 7
   height: 0.5
   minPitch: -60.6
@@ -11115,6 +11116,9 @@ MonoBehaviour:
   sensitivity: 1
   smoothTimePos: 0
   smoothTimeRot: 0
+  maxPitchTilt: 5
+  maxRollTilt: 5
+  tiltSmoothTime: 0.2
   lockCursor: 1
 --- !u!114 &5707005521135689534
 MonoBehaviour:

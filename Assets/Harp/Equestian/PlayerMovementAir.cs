@@ -88,7 +88,7 @@ namespace Player.Movement
             /*if (Input.GetKeyDown(KeyCode.Space))
             {
                 doubleJumpBuffer = JumpBuffer;
-                
+                    
             }*/
 
             
