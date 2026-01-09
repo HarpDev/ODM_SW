@@ -139,6 +139,13 @@ namespace Player.Movement
                 doubleJump = false;
                 parent.CurrentState = WallrunState;
             }
+
+
+
+            if (Input.GetKeyDown(KeyCode.LeftAlt))
+            {
+                parent.CurrentState = Dash;
+            }
         }
 
 

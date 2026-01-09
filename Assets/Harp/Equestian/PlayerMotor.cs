@@ -10,10 +10,47 @@ namespace Player.Movement
     [RequireComponent(typeof(Rigidbody), typeof(CapsuleCollider))]
     public class PlayerMotor : MonoBehaviour
     {
+        #region Delegates and Events
         public delegate void OnPlayerGroundedChanged(bool curr, bool prev);
+        public OnPlayerGroundedChanged OnGroundedChanged;
+        #endregion
+
+        #region Serialized Fields
+        [Header("Third Person Orientation")]
+        public Transform Camera;
+        public float GroundRotationSpeed = 12f;
+        public float AirborneRotationSpeed = 6f;
+
+        [SerializeField] private PL_ODM ODM;
+        #endregion
+
+        #region Public Fields
         public PlayerMovementStateBase DefaultState;
         public PlayerMovementStateBase SlideState;
+        public Timer RecentJumpTimer;
+        public float OriginalCameraHeight = 1.7f;
+        public float CameraSmoothTime = 0.1f;
+        public Transform CameraRoot;
+        public Transform GroundPoint;
+        public float GroundRadius;
+        public LayerMask GroundLayers;
+        public AudioSource[] Audio;
+        public ParticleSystem[] Particles;
+        public float currentSpeed;
+        #endregion
 
+        #region Hidden Fields
+        [HideInInspector] public float TargetCameraHeight;
+        [HideInInspector] public float slideBoostTimer;
+        #endregion
+
+        #region Private Fields
+        private PlayerMovementStateBase state;
+        private bool isGrounded;
+        private float cameraVel;
+        #endregion
+
+        #region Properties
         public PlayerMovementStateBase CurrentState
         {
             get
@@ -79,37 +116,14 @@ namespace Player.Movement
             }
         }
 
-        public Timer RecentJumpTimer;
         public GameObject GroundObject { get; private set; }
-        [HideInInspector] public float TargetCameraHeight;
-        [HideInInspector] public float slideBoostTimer;
-        public float OriginalCameraHeight = 1.7f;
-        public float CameraSmoothTime = 0.1f;
-        public OnPlayerGroundedChanged OnGroundedChanged;
-        public Transform CameraRoot;
-        public Transform GroundPoint;
-        public float GroundRadius;
-        public LayerMask GroundLayers;
-        public AudioSource[] Audio;
-        public ParticleSystem[] Particles;
-        public float currentSpeed;
+        #endregion
 
-        [Header("Third Person Orientation")]
-        public Transform Camera;
-        public float GroundRotationSpeed = 12f;
-        public float AirborneRotationSpeed = 6f;
-
-        [SerializeField] private PL_ODM ODM;
-
-        private PlayerMovementStateBase state;
-        private bool isGrounded;
-        private float cameraVel;
-
+        #region Unity Methods
         private void Awake()
         {
             Rigidbody = GetComponent<Rigidbody>();
             Collider = GetComponent<CapsuleCollider>();
-
             TargetCameraHeight = OriginalCameraHeight;
             if (DefaultState == null)
                 enabled = false;
@@ -126,15 +140,6 @@ namespace Player.Movement
             StartCoroutine(UpdateSpeed());
         }
 
-        private IEnumerator UpdateSpeed()
-        {
-            while (true)
-            {
-                currentSpeed = Mathf.Ceil(Rigidbody.velocity.magnitude);
-                yield return new WaitForSeconds(1f);
-            }
-        }
-
         private void Update()
         {
             CameraHeight = Mathf.SmoothDamp(CameraHeight, TargetCameraHeight, ref cameraVel, CameraSmoothTime);
@@ -144,51 +149,54 @@ namespace Player.Movement
         private void FixedUpdate()
         {
             RecentJumpTimer.Tick(Time.fixedDeltaTime);
-
             Collider[] cols = Physics.OverlapSphere(GroundPoint.position, GroundRadius, GroundLayers)
                 .OrderBy(c => (c.transform.position - transform.position).sqrMagnitude).ToArray();
             IsGrounded = cols.Length > 0;
             GroundObject = IsGrounded ? cols[0].gameObject : null;
-
             if (slideBoostTimer > 0f)
                 slideBoostTimer -= Time.fixedDeltaTime;
             else if (slideBoostTimer < 0f)
                 slideBoostTimer = 0f;
-
             CurrentState.TickUpdate(this);
-
             if (!ODM.isReeling)
                 HandleCameraFacingRotation();
-
             if (SlideState != null)
             {
                 PlayerMovementStateBase desiredState = (IsGrounded && ODM.isReeling) ? SlideState : CurrentState;
                 CurrentState = desiredState;
             }
         }
+        #endregion
 
+        #region Coroutines
+        private IEnumerator UpdateSpeed()
+        {
+            while (true)
+            {
+                currentSpeed = Mathf.Ceil(Rigidbody.velocity.magnitude);
+                yield return new WaitForSeconds(1f);
+            }
+        }
+        #endregion
+
+        #region Public Methods
         public Vector3 GetWishDir()
         {
             if (Camera == null) return Vector3.zero;
-
             float h = Input.GetAxisRaw("Horizontal");
             float v = Input.GetAxisRaw("Vertical");
-
             Vector3 camForward = Camera.forward;
             Vector3 camRight = Camera.right;
-
             camForward.y = 0f;
             camRight.y = 0f;
             camForward = camForward.normalized;
             camRight = camRight.normalized;
-
             Vector3 groundNormal = GetGroundNormal();
             if (groundNormal != Vector3.zero)
             {
                 camForward = Vector3.ProjectOnPlane(camForward, groundNormal).normalized;
                 camRight = Vector3.ProjectOnPlane(camRight, groundNormal).normalized;
             }
-
             return (h * camRight + v * camForward).normalized;
         }
 
@@ -238,27 +246,25 @@ namespace Player.Movement
             au = GetParticle(index);
             return au != null;
         }
+        #endregion
 
+        #region Private Methods
         private void HandleCameraFacingRotation()
         {
             if (Camera == null || ODM.isReeling) return;
-
             Vector3 wishDir = GetWishDir();
             bool hasInput = wishDir.magnitude >= 0.1f;
-
             // For grounded, skip if no input; for air, always rotate
             if (IsGrounded && !hasInput) return;
-
             Vector3 camForward = Camera.forward;
             camForward.y = 0f;
             if (camForward.sqrMagnitude < 0.0001f) return;
             camForward.Normalize();
-
             Quaternion targetRotation = Quaternion.LookRotation(camForward, Vector3.up);
-
             float rotationSpeed = IsGrounded ? GroundRotationSpeed : AirborneRotationSpeed;
             float rotationStep = rotationSpeed * Time.fixedDeltaTime;
             Rigidbody.MoveRotation(Quaternion.Slerp(Rigidbody.rotation, targetRotation, rotationStep));
         }
+        #endregion
     }
 }

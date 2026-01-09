@@ -8651,7 +8651,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1657027915208480105
 Transform:
   m_ObjectHideFlags: 0
@@ -9934,13 +9934,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7b8a9837191649f4fa7eb8efe7c09222, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  cameraTransform: {fileID: 1468077733894246076}
+  cameraTransform: {fileID: 4815051217769872809}
   bodyTransform: {fileID: 953062330861157392}
   maxYaw: 85
   maxPitch: -40
   rotationSpeed: 20
   YrotAdditive: 0
-  XrotAdditive: 180
+  XrotAdditive: -180
   LockOnYrotAdditive: 0
   LockOnXrotAdditive: 0
   LockOnOverride: 0
@@ -11083,13 +11083,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 270909a8cf455b64a91b942fe1e168b7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  Camera: {fileID: 1468077733894246076}
+  GroundRotationSpeed: 12
+  AirborneRotationSpeed: 6
+  ODM: {fileID: 4358297870060580774}
   DefaultState: {fileID: 11400000, guid: 0c0f45316779dac40af3102b1e4d2975, type: 2}
   SlideState: {fileID: 11400000, guid: de9cd6cbdb0acac47825a08e9b6a07d0, type: 2}
   RecentJumpTimer:
     StartEnded: 0
     <MaxValue>k__BackingField: 0
-  TargetCameraHeight: 0
-  slideBoostTimer: 0
   OriginalCameraHeight: 1.7
   CameraSmoothTime: 0.1
   CameraRoot: {fileID: 3725211195260193925}
@@ -11101,10 +11103,8 @@ MonoBehaviour:
   Audio: []
   Particles: []
   currentSpeed: 0
-  Camera: {fileID: 1468077733894246076}
-  GroundRotationSpeed: 12
-  AirborneRotationSpeed: 6
-  ODM: {fileID: 4358297870060580774}
+  TargetCameraHeight: 0
+  slideBoostTimer: 0
 --- !u!114 &4358297870060580774
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -13411,13 +13411,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8556942024695453979}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.13, y: 0.31, z: 0.41}
+  m_LocalRotation: {x: -0, y: -1, z: -0, w: 0.0000029504295}
+  m_LocalPosition: {x: -0.13, y: 0.861, z: -0.312}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 4177053600932572413}
-  m_LocalEulerAnglesHint: {x: -90, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: -180, z: 0}
 --- !u!198 &697096996796537705
 ParticleSystem:
   m_ObjectHideFlags: 0
@@ -13426,7 +13426,7 @@ ParticleSystem:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8556942024695453979}
   serializedVersion: 8
-  lengthInSec: 5
+  lengthInSec: 1
   simulationSpeed: 0.37
   stopAction: 0
   cullingMode: 0
@@ -14255,7 +14255,7 @@ ParticleSystem:
     rateOverTime:
       serializedVersion: 2
       minMaxState: 0
-      scalar: 3.74
+      scalar: 1
       minScalar: 10
       maxCurve:
         serializedVersion: 2

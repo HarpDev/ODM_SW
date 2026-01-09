@@ -23,8 +23,5 @@ MonoBehaviour:
   JumpSpeed: 18.4
   JumpBuffer: 0.7
   ExitState: {fileID: 11400000, guid: 354a082a6bc46c241b2557133353c573, type: 2}
-  ODMJumpBoostAmount: 0.7
-  JumpCost: 4.5
-  Duration: 0.34
-  DurationIfNoGas: 0.3
+  Duration: 0.5
   DashEndMultiplier: 0.3
