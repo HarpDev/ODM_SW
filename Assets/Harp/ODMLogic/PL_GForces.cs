@@ -6,7 +6,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using System.Globalization;
 using UnityEngine.Rendering;
-using UnityEngine.Rendering.HighDefinition;
+//using UnityEngine.Rendering.HighDefinition;
 using Player.Movement;
 
 public class PL_GForces : MonoBehaviour
@@ -224,7 +224,7 @@ public class PL_GForces : MonoBehaviour
         if (impactSpeed > 10)
         {
             // Calculate the impact force based on the relative velocity
-            float impactForce = impactSpeed * playerODMGear.movementScript.Rigidbody.mass;
+            float impactForce = impactSpeed * playerODMGear.player.Rigidbody.mass;
 
             // Determine the appropriate audio clip and volume based on the impact force
             AudioClip[] clipsToUse = impactForce >= 25 ? hardImpactAudioClips : impactAudioClips;

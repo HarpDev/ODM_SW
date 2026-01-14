@@ -84,12 +84,7 @@ namespace Player.Movement
         public override void InputUpdate(PlayerMotor parent)
         {
             base.InputUpdate(parent);
-
-            /*if (Input.GetKeyDown(KeyCode.Space))
-            {
-                doubleJumpBuffer = JumpBuffer;
-                    
-            }*/
+    
 
             
 
@@ -112,7 +107,7 @@ namespace Player.Movement
             {
                 if (currentCoyote > 0f)
                 {
-                    TryJump(parent, coyoteJumpSpeed);
+                    TryWallKick(parent);
                     currentCoyote = 0f;
                     doubleJumpBuffer = 0f;
                 }
@@ -126,9 +121,10 @@ namespace Player.Movement
 
             if (doubleJumpBuffer > 0f)
             {
-                doubleJumpBuffer -= Time.fixedDeltaTime;
+
                 if (currentCoyote <= 0f)
-                    TryDoubleJump(parent);
+                    return;
+                    //TryDoubleJump(parent);
             }
             else if (doubleJumpBuffer < 0f)
                 doubleJumpBuffer = 0f;
@@ -142,10 +138,7 @@ namespace Player.Movement
 
 
 
-            if (Input.GetKeyDown(KeyCode.LeftAlt))
-            {
-                parent.CurrentState = Dash;
-            }
+           
         }
 
 

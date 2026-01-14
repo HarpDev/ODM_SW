@@ -61,7 +61,7 @@ public class GasRefilStation : MonoBehaviour
 
         
         // Constantly refill while player is in trigger and ODM exists
-        if (isPlayerInTrigger && odm != null && odm.currentGasAmount < 1500)
+        if (isPlayerInTrigger && odm != null && odm.currentGasAmount < odm.maximumGasAmount)
         {
             gasFillUI.fillAmount = RefillStationCapacity / 8000;
             RefillStationCapacity -= Time.deltaTime * refillRateMultiplier;

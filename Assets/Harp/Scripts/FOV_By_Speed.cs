@@ -1,8 +1,6 @@
 using Player.Movement;
 using System.Collections;
 using System.Collections.Generic;
-using Unity.VisualScripting;
-using Unity.VisualScripting.Dependencies.Sqlite;
 using UnityEngine;
 
 public class FOV_By_Speed : MonoBehaviour
