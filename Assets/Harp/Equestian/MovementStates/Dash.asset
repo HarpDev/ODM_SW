@@ -14,12 +14,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   CameraHeight: 1.02
   BodyHeight: 2
-  Gravity: -30
-  ControlThreshold: 11.93
-  Speed: 52.4
+  Gravity: 0
+  ControlThreshold: 0
+  Speed: 100
   GasSpeed: 2.67
-  WalkSpeed: 46.4
-  Drag: 2.41
+  WalkSpeed: 0
+  Drag: 0
   JumpSpeed: 18.4
   JumpBuffer: 0.7
   ExitState: {fileID: 11400000, guid: 354a082a6bc46c241b2557133353c573, type: 2}

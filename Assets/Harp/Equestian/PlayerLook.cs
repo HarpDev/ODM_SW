@@ -1,8 +1,11 @@
-using SwiftKraft.Saving.Settings;
 using System.Collections.Generic;
+using Harp.ODMLogic;
+using Player.Movement;
+using SwiftKraft.Saving.Settings;
 using UnityEngine;
+using UnityEngine.Serialization;
 
-namespace Player.Movement
+namespace Harp.Equestian
 {
     [DisallowMultipleComponent]
     public class PlayerLook : MonoBehaviour
@@ -12,9 +15,9 @@ namespace Player.Movement
         [Header("References")]
         public Transform playerCamera; // switched to referencing transform instead of player camera 1/6/26
         public Transform cameraPivot;
-        public PL_ODM ODM; // this is needed as most camera tilt effects are based on ODM traversal
+        [FormerlySerializedAs("ODM")] public PL_ODM odm; // this is needed as most camera tilt effects are based on ODM traversal
         public PlayerMotor player;
-        public Camera Cam;
+        [FormerlySerializedAs("Cam")] public Camera cam;
         [Header("Orbit Settings")]
         public float distance = 3.5f;
         public float height = 1.6f;
@@ -36,26 +39,26 @@ namespace Player.Movement
         public float normalFOV = 60f;
         public float zoomFOV = 40f;
         public float zoomSmoothTime = 0.2f;
-        [Header("FOV Boost Settings")]
-        public float fovBoostThreshold = 10f;
-        public float fovBoostMultiplier = 1f;
-        public float maxFOVBoost = 20f;
-        public float fovBoostSmoothTime = 0.5f;
+        [Header("Dynamic FOV Settings")]
+        public float dynamicSmoothTime = 0.5f;
+        public float dynamicDecayRate = 5f;
         [Header("Optional")]
         public bool lockCursor = true;
-        float pitch = 10f;
-        float yaw = 0f;
-        float currSens;
-        float currentShoulderOffset;
-        float shoulderVel;
-        float currentFOV;
-        float fovVel;
-        float currentFOVBoost;
-        float boostVel;
+
+        float _pitch = 10f;
+        float _yaw;
+        float _currSens;
+        float _currentShoulderOffset;
+        float _shoulderVel;
+        float _currentFOV;
+        float _fovVel;
+        float _dynamicFOVTarget;
+        float _currentDynamicFOV;
+        float _dynamicVel;
 
         private void Awake()
         {
-            currSens = Sensitivity;
+            _currSens = Sensitivity;
             if (lockCursor)
             {
                 Cursor.lockState = CursorLockMode.Locked;
@@ -67,59 +70,58 @@ namespace Player.Movement
                 tiltTarget = tiltObj.transform;
                 tiltTarget.SetParent(cameraPivot, worldPositionStays: false);
             }
-            if (Cam == null && playerCamera != null)
+            if (cam == null && playerCamera != null)
             {
-                Cam = playerCamera.GetComponent<Camera>();
+                cam = playerCamera.GetComponent<Camera>();
             }
-            currentFOV = normalFOV;
-            if (Cam != null) Cam.fieldOfView = normalFOV;
+            _currentFOV = normalFOV;
+            if (cam != null) cam.fieldOfView = normalFOV;
         }
         private void OnEnable()
         {
-            currSens = Sensitivity;
+            _currSens = Sensitivity;
         }
-        private Vector3 positionVel;
+        private Vector3 _positionVel;
         private void LateUpdate()
         {
             PerformCameraTiltFunctionality();
             PerformShoulderSwapFunctionality();
             PerformFOVAdjustments();
 
-            currSens = Sensitivity;
+            _currSens = Sensitivity;
             foreach (OverrideLayer layer in Overrides)
             {
                 if (layer.Sensitivity > 0)
                 {
-                    currSens = layer.Sensitivity;
+                    _currSens = layer.Sensitivity;
                     break;
                 }
             }
             Vector2 mouseInput = new Vector2(Input.GetAxisRaw("Mouse X"), Input.GetAxisRaw("Mouse Y"));
             // apply sensitivity
-            float mx = mouseInput.x * currSens;
-            float my = mouseInput.y * currSens;
-            yaw += mx;
-            pitch -= my;
-            pitch = Mathf.Clamp(pitch, minPitch, maxPitch);
+            float mx = mouseInput.x * _currSens;
+            float my = mouseInput.y * _currSens;
+            _yaw += mx;
+            _pitch -= my;
+            _pitch = Mathf.Clamp(_pitch, minPitch, maxPitch);
             // compute target position/rotation for camera
             if (cameraPivot != null && playerCamera != null && tiltTarget != null)
             {
                 Vector3 pivotPos = cameraPivot.position + Vector3.up * height;
-                Quaternion baseRot = Quaternion.Euler(pitch, yaw, 0f);
+                Quaternion baseRot = Quaternion.Euler(_pitch, _yaw, 0f);
                 Quaternion rot = baseRot * tiltTarget.localRotation;
-                Vector3 offset = Vector3.back * distance + Vector3.right * currentShoulderOffset;
+                Vector3 offset = Vector3.back * distance + Vector3.right * _currentShoulderOffset;
                 Vector3 desiredCamPos = pivotPos + rot * offset;
-                // optional collision check
+                // collision check to prevent clipping
                 if (Physics.Linecast(pivotPos, desiredCamPos, out RaycastHit hit, ~0, QueryTriggerInteraction.Ignore))
                 {
                     float adjustedDistance = Mathf.Max(0.5f, (hit.point - pivotPos).magnitude - 0.1f);
-                    desiredCamPos = pivotPos + rot * (Vector3.back * adjustedDistance + Vector3.right * currentShoulderOffset);
+                    desiredCamPos = pivotPos + rot * (Vector3.back * adjustedDistance + Vector3.right * _currentShoulderOffset);
                 }
-                // ? FIX: use Vector3 velocity, not float
                 playerCamera.transform.position = Vector3.SmoothDamp(
                     playerCamera.transform.position,
                     desiredCamPos,
-                    ref positionVel,
+                    ref _positionVel,
                     smoothTimePos
                 );
                 playerCamera.transform.rotation = Quaternion.Slerp(
@@ -128,9 +130,9 @@ namespace Player.Movement
                     Time.deltaTime * (1f / Mathf.Max(0.001f, smoothTimeRot))
                 );
             }
-            if (Cam != null)
+            if (cam != null)
             {
-                Cam.fieldOfView = currentFOV + currentFOVBoost;
+                cam.fieldOfView = _currentFOV + _currentDynamicFOV;
             }
         }
         private void PerformCameraTiltFunctionality()
@@ -138,7 +140,7 @@ namespace Player.Movement
             if (tiltTarget == null) return;
             float targetPitchOffset = 0f;
             float targetRoll = 0f;
-            if (ODM.isReeling && !player.IsGrounded)
+            if (odm.isReeling && !player.IsGrounded)
             {
                 Vector2 moveInput = new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"));
                 if (moveInput != Vector2.zero)
@@ -160,34 +162,35 @@ namespace Player.Movement
         {
             float targetShoulder = 0f;
             
-            bool qPressed = Input.GetKey(KeyCode.Mouse0);//these need to be renamed to match input
+            bool qPressed = Input.GetKey(KeyCode.Mouse0);
             bool ePressed = Input.GetKey(KeyCode.Mouse1);
 
-            
-            if (qPressed && !ePressed && !player.IsGrounded && ODM.currentGasAmount > 0)
+            if (odm.isReeling)
             {
-                targetShoulder = -shoulderOffsetAmount;
-            }
-            else if (ePressed && !qPressed && !player.IsGrounded && ODM.currentGasAmount > 0)
-            {
-                targetShoulder = shoulderOffsetAmount;
+                if (qPressed && !ePressed && !player.IsGrounded && odm.currentGasAmount > 0)
+                {
+                    targetShoulder = -shoulderOffsetAmount;
+                }
+                else if (ePressed && !qPressed && !player.IsGrounded && odm.currentGasAmount > 0)
+                {
+                    targetShoulder = shoulderOffsetAmount;
+                }
+
+                if (!qPressed && !ePressed)
+                {
+                    targetShoulder = 0f;
+                }
             }
 
-            if (!qPressed && !ePressed)
-            {
-                targetShoulder = 0f;
-            }
-            currentShoulderOffset = Mathf.SmoothDamp(currentShoulderOffset, targetShoulder, ref shoulderVel, shoulderSmoothTime);
+            _currentShoulderOffset = Mathf.SmoothDamp(_currentShoulderOffset, targetShoulder, ref _shoulderVel, shoulderSmoothTime);
         }
         private void PerformFOVAdjustments()
         {
             float targetFOV = normalFOV;
-            currentFOV = Mathf.SmoothDamp(currentFOV, targetFOV, ref fovVel, zoomSmoothTime);
+            _currentFOV = Mathf.SmoothDamp(_currentFOV, targetFOV, ref _fovVel, zoomSmoothTime);
 
-            float speed = ODM.currentSpeed;
-            float excessSpeed = Mathf.Max(0f, speed - fovBoostThreshold);
-            float targetBoost = Mathf.Min(maxFOVBoost, excessSpeed * fovBoostMultiplier);
-            currentFOVBoost = Mathf.SmoothDamp(currentFOVBoost, targetBoost, ref boostVel, fovBoostSmoothTime);
+            _currentDynamicFOV = Mathf.SmoothDamp(_currentDynamicFOV, _dynamicFOVTarget, ref _dynamicVel, dynamicSmoothTime);
+            _dynamicFOVTarget = Mathf.Max(0f, _dynamicFOVTarget - dynamicDecayRate * Time.deltaTime);
         }
         private void FixedUpdate()
         {
@@ -201,6 +204,11 @@ namespace Player.Movement
             return layer;
         }
         public float Sensitivity => SettingsManager.Current.TrySetting("Sensitivity", out SingleSetting<float> sens) ? sens.Value : sensitivity;
+        public void FovBurst(float amount)
+        {
+            if (cam.fieldOfView <= 110)
+            _dynamicFOVTarget += amount;
+        }
         public class OverrideLayer
         {
             public float Sensitivity;
