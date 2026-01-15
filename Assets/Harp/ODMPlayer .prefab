@@ -5329,7 +5329,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &1532796583668378818
 RectTransform:
   m_ObjectHideFlags: 0
@@ -5337,12 +5337,12 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 899936491242778481}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.5, y: 0.5, z: 0.5}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 4706561799760166342}
+  m_Father: {fileID: 6240842067911287427}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -5370,7 +5370,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 0.9725491, g: 0.4784314, b: 0, a: 0.24705882}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -5378,7 +5378,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   m_Sprite: {fileID: 21300000, guid: 1ecb5ed5fe4742945957240918d4da6d, type: 3}
-  m_Type: 0
+  m_Type: 3
   m_PreserveAspect: 0
   m_FillCenter: 1
   m_FillMethod: 4
@@ -7588,6 +7588,7 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
+  - {fileID: 1532796583668378818}
   - {fileID: 3189736594835453092}
   - {fileID: 679001976609626535}
   - {fileID: 2541011479237158974}
@@ -10133,6 +10134,7 @@ MonoBehaviour:
   - {fileID: 4944259462256634998}
   gasUI: {fileID: 1249024524701518172}
   speedText: {fileID: 3166786600541823084}
+  dashCooldownImage: {fileID: 718937430759656009}
 --- !u!82 &4822305997545155964
 AudioSource:
   m_ObjectHideFlags: 0
@@ -11323,7 +11325,6 @@ RectTransform:
   - {fileID: 6497588780191140511}
   - {fileID: 1641725274727242224}
   - {fileID: 1433639755866480331}
-  - {fileID: 1532796583668378818}
   - {fileID: 4069432310662490468}
   m_Father: {fileID: 8642098800302356585}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
