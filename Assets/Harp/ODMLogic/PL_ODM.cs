@@ -158,7 +158,7 @@ namespace Harp.ODMLogic
 
         private void UpdateDashUI()
         {
-            if (dashCooldownImage != null)
+            if (dashCooldownImage != null && currentGasAmount > 0f)
             {
                 if (dashTimer > 0f)
                 {
