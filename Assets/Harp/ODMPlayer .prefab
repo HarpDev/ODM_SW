@@ -5324,7 +5324,7 @@ GameObject:
   - component: {fileID: 5755415617380590319}
   - component: {fileID: 718937430759656009}
   m_Layer: 5
-  m_Name: CrossHair Middle Static
+  m_Name: CircleBurstCoolDown
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -5339,7 +5339,7 @@ RectTransform:
   m_GameObject: {fileID: 899936491242778481}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 0.7967, y: 0.7967, z: 0.7967}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 6240842067911287427}
@@ -5381,10 +5381,10 @@ MonoBehaviour:
   m_Type: 3
   m_PreserveAspect: 0
   m_FillCenter: 1
-  m_FillMethod: 4
+  m_FillMethod: 1
   m_FillAmount: 1
   m_FillClockwise: 1
-  m_FillOrigin: 0
+  m_FillOrigin: 1
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
 --- !u!1 &1045539865394870997
@@ -8576,7 +8576,7 @@ MonoBehaviour:
   m_PreserveAspect: 0
   m_FillCenter: 1
   m_FillMethod: 4
-  m_FillAmount: 0.619
+  m_FillAmount: 1
   m_FillClockwise: 1
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
@@ -9975,7 +9975,7 @@ Rigidbody:
   m_IsKinematic: 0
   m_Interpolate: 1
   m_Constraints: 80
-  m_CollisionDetection: 0
+  m_CollisionDetection: 1
 --- !u!136 &8839467736562720771
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -10285,7 +10285,7 @@ MonoBehaviour:
   odm: {fileID: 4358297870060580774}
   player: {fileID: 8357671278190338441}
   cam: {fileID: 5011468201530433333}
-  distance: 7
+  distance: 5
   height: 0.5
   minPitch: -90
   maxPitch: 90
@@ -10302,7 +10302,7 @@ MonoBehaviour:
   zoomFOV: 40
   zoomSmoothTime: 0.2
   dynamicSmoothTime: 0.06
-  dynamicDecayRate: 4.93
+  dynamicDecayRate: 30
   lockCursor: 1
 --- !u!114 &5707005521135689534
 MonoBehaviour:
@@ -11106,7 +11106,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &679001976609626535
 RectTransform:
   m_ObjectHideFlags: 0

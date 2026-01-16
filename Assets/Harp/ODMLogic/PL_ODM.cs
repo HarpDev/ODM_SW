@@ -422,8 +422,7 @@ namespace Harp.ODMLogic
         void OrbitInputUpdate()
         {
             //Orbiting
-            if (player.IsGrounded == false) //Player distance from point is too long
-            {
+          
                 if (!hooksReady[0] || !hooksReady[1])
                 {
                     isOrbiting = false;
@@ -451,7 +450,7 @@ namespace Harp.ODMLogic
                         HandleOrbitNoDoubleTap(0);
                         isOrbiting = true;
                     }
-                }
+                
             }
         }
 
