@@ -36,6 +36,9 @@ namespace SwiftKraft.Gameplay.Common.FPS.Demo
             cursor.Active = !CursorManager.DefaultUnlocked && active;
             IsOpen = active;
             UpdateOpen?.Invoke(IsOpen);
+
+            // Pause or resume the game based on menu state
+            Time.timeScale = active ? 0f : 1f;
         }
 
         public void QuitGame()
