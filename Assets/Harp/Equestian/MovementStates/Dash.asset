@@ -16,7 +16,7 @@ MonoBehaviour:
   BodyHeight: 2
   Gravity: 0
   ControlThreshold: 0
-  Speed: 100
+  Speed: 70
   GasSpeed: 2.67
   WalkSpeed: 0
   Drag: 0
@@ -24,4 +24,4 @@ MonoBehaviour:
   JumpBuffer: 0.7
   ExitState: {fileID: 11400000, guid: 354a082a6bc46c241b2557133353c573, type: 2}
   Duration: 0.5
-  DashEndMultiplier: 0.3
+  DashEndMultiplier: 1

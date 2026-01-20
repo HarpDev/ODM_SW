@@ -20,7 +20,7 @@ MonoBehaviour:
   GasSpeed: 2
   WalkSpeed: 0.5
   Drag: 14
-  JumpSpeed: 17.7
+  JumpSpeed: 20
   JumpBuffer: 0.1
   StepHeight: 0.7
   AirState: {fileID: 11400000, guid: 354a082a6bc46c241b2557133353c573, type: 2}
