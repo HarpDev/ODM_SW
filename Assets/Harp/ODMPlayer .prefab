@@ -10414,7 +10414,7 @@ MonoBehaviour:
   maxRollTilt: 3
   tiltSmoothTime: 0.2
   tiltTarget: {fileID: 5123416960364606567}
-  shoulderOffsetAmount: 0.71
+  shoulderOffsetAmount: -0.71
   shoulderSmoothTime: 0.1
   normalFOV: 70
   zoomFOV: 40
