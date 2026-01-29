@@ -5,7 +5,7 @@ EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Scenes:
-  - enabled: 1
+  - enabled: 0
     path: Assets/Harp/MainLevel.unity
     guid: bb94de2fa6a34334a95285d348008d51
   - enabled: 0
@@ -20,4 +20,7 @@ EditorBuildSettings:
   - enabled: 0
     path: Assets/SwiftKraft/Gameplay/Common/FPS/Demo/Scenes/Lab.unity
     guid: 989c769b6d31dc54d90f95d46b19e08e
+  - enabled: 1
+    path: Assets/Harp/Player/AnimationTest.unity
+    guid: 94df4ad446f9b744eb30dd63d4584d3f
   m_configObjects: {}

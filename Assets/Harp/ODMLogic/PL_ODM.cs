@@ -26,6 +26,8 @@ namespace Harp.ODMLogic
 
         public PlayerMovementSlide slide;
         public PlayerMovementGround ground;
+        private bool _wasGrounded;
+
         public PlayerMovementDash dash;
         public PlayerMovementAir air;
 
@@ -54,7 +56,7 @@ namespace Harp.ODMLogic
         public List<AudioSource> hookReelAudioSources;
         public List<AudioSource> hooksLatchAudioSources;
         public List<float> targetPitch = new List<float>(new[] { 1f, 1f });
-        private float divider;
+        private float _divider;
 
         [Header("Audio Gas ODM")]
         public AudioSource gasAudioSource;
@@ -90,7 +92,7 @@ namespace Harp.ODMLogic
         [SerializeField] private float boostImpulseForce = 10f;
 
         [Header("Logic Hook Fire")]
-        public List<bool> hooksReady = new List<bool>(new bool[] { true, true });
+        public List<bool> hooksReady = new List<bool>(new[] { true, true });
         public List<float> hookCooldownTimes = new List<float>(new float[] { 0.5f, 0.5f });
         public float hookFireCooldownTimeBase = 0.5f;
         public List<int> reelingInOutState = new List<int>(new int[] { 3, 3 });
@@ -132,6 +134,25 @@ namespace Harp.ODMLogic
         private bool _isBoosting;
         private bool _wasBoosting;
 
+        
+        
+        [Header("Animation")]
+        [SerializeField] private Animator animator;
+
+        // Cached parameter hashes (avoid string lookups)
+        private static readonly int AnimSpeed = Animator.StringToHash("Speed");
+        private static readonly int AnimGrounded = Animator.StringToHash("Grounded");
+        private static readonly int AnimVerticalVel = Animator.StringToHash("VerticalVelocity");
+        private static readonly int AnimIsReeling = Animator.StringToHash("IsReeling");
+        private static readonly int AnimIsOrbiting = Animator.StringToHash("IsOrbiting");
+        private static readonly int AnimIsBoosting = Animator.StringToHash("IsBoosting");
+        private static readonly int AnimDash = Animator.StringToHash("Dash");
+        private static readonly int AnimHookFireL = Animator.StringToHash("HookFireL");
+        private static readonly int AnimHookFireR = Animator.StringToHash("HookFireR");
+        private static readonly int AnimHookLatch = Animator.StringToHash("HookLatch");
+        private static readonly int AnimLand = Animator.StringToHash("Land");
+        private static readonly int AnimIsSliding = Animator.StringToHash("IsSliding");
+        
         // =====================================================================================
         // UNITY LIFECYCLE METHODS
         // =====================================================================================
@@ -141,6 +162,17 @@ namespace Harp.ODMLogic
             currentSpeed = Mathf.Ceil(player.Rigidbody.velocity.magnitude);
             speedText.text = currentSpeed.ToString(CultureInfo.CurrentCulture) + " m/s";
 
+            // --- Animation locomotion feed ---
+            UpdateAnimationParameters();
+            
+            // Check for landing
+            if (!_wasGrounded && player.IsGrounded)
+            {
+                animator.SetTrigger(AnimLand);
+            }
+
+            _wasGrounded = player.IsGrounded;
+            
             UpdateCooldownTimers();
             UpdateDashTimers();
             UpdateDashUI();
@@ -149,6 +181,41 @@ namespace Harp.ODMLogic
 
             ReelingSounds(0);
             ReelingSounds(1);
+        }
+
+        private void UpdateAnimationParameters()
+        {
+            if (animator == null) return;
+
+            // Locomotion parameters
+            animator.SetFloat(AnimSpeed, currentSpeed);
+            animator.SetBool(AnimGrounded, player.IsGrounded);
+            animator.SetFloat(AnimVerticalVel, player.Rigidbody.velocity.y);
+
+            // ODM State parameters
+            animator.SetBool(AnimIsReeling, isReeling);
+            animator.SetBool(AnimIsOrbiting, isOrbiting);
+            animator.SetBool(AnimIsBoosting, _isBoosting);
+            
+            // Check if sliding (you may need to add this bool parameter to your animator)
+            bool isSliding = player.CurrentState == slide;
+            if (HasParameter(animator, AnimIsSliding))
+            {
+                animator.SetBool(AnimIsSliding, isSliding);
+            }
+        }
+
+        // Helper method to check if animator has a parameter
+        private bool HasParameter(Animator anim, int paramHash)
+        {
+            if (anim == null) return false;
+            
+            foreach (AnimatorControllerParameter param in anim.parameters)
+            {
+                if (param.nameHash == paramHash)
+                    return true;
+            }
+            return false;
         }
 
         private void UpdateGasUI()
@@ -389,6 +456,10 @@ namespace Harp.ODMLogic
             if (Input.GetKeyDown(KeyCode.Mouse0) && hookCooldownTimes[0] <= 0 && hooksReady[0] && _hookPredictionHits[0].point != Vector3.zero && currentGasAmount > 0)
             {
                 FireHook(0);
+                if (animator != null)
+                {
+                    animator.SetTrigger(AnimHookFireL);
+                }
             }
             else if (Input.GetKeyUp(KeyCode.Mouse0))
             {
@@ -398,6 +469,10 @@ namespace Harp.ODMLogic
             if (Input.GetKeyDown(KeyCode.Mouse1) && hookCooldownTimes[1] <= 0 && hooksReady[1] && _hookPredictionHits[1].point != Vector3.zero && currentGasAmount > 0)
             {
                 FireHook(1);
+                if (animator != null)
+                {
+                    animator.SetTrigger(AnimHookFireR);
+                }
             }
             else if (Input.GetKeyUp(KeyCode.Mouse1))
             {
@@ -422,35 +497,33 @@ namespace Harp.ODMLogic
         void OrbitInputUpdate()
         {
             //Orbiting
+            isOrbiting = false; // Reset orbit state each frame
           
-                if (!hooksReady[0] || !hooksReady[1])
+            if (!hooksReady[0] || !hooksReady[1])
+            {
+                if (Input.GetKey(KeyCode.W) && isReeling)//UP
                 {
-                    isOrbiting = false;
+                    HandleOrbitNoDoubleTap(3);
+                    isOrbiting = true;
+                }
 
-                    if (Input.GetKey(KeyCode.W) && isReeling)//UP
-                    {
-                        HandleOrbitNoDoubleTap(3);
-                        isOrbiting = true;
-                    }
+                if (Input.GetKey(KeyCode.S) && isReeling)//DOWN
+                {
+                    HandleOrbitNoDoubleTap(2);
+                    isOrbiting = true;
+                }
 
-                    if (Input.GetKey(KeyCode.S) && isReeling)//DOWN
-                    {
-                        HandleOrbitNoDoubleTap(2);
-                        isOrbiting = true;
-                    }
+                if (Input.GetKey(KeyCode.A) && isReeling)//LEFt
+                {
+                    HandleOrbitNoDoubleTap(1);
+                    isOrbiting = true;
+                }
 
-                    if (Input.GetKey(KeyCode.A) && isReeling)//LEFt
-                    {
-                        HandleOrbitNoDoubleTap(1);
-                        isOrbiting = true;
-                    }
-
-                    if (Input.GetKey(KeyCode.D) && isReeling)//RIGHT
-                    {
-                        HandleOrbitNoDoubleTap(0);
-                        isOrbiting = true;
-                    }
-                
+                if (Input.GetKey(KeyCode.D) && isReeling)//RIGHT
+                {
+                    HandleOrbitNoDoubleTap(0);
+                    isOrbiting = true;
+                }
             }
         }
 
@@ -543,12 +616,23 @@ namespace Harp.ODMLogic
             if (wishDir.magnitude < 0.1f)
             {
                 // No movement input held: Dodge UP (weaker than horizontal for balance)
+                if (animator != null)
+                {
+                    animator.SetTrigger(AnimDash);
+                }
+
                 dashDir = player.Rigidbody.transform.up;
                 strength = gasDashForce / 1.4f;
+                
             }
             else
             {
                 // Movement input(s) held: Dodge horizontally in camera-relative wish direction (supports diagonals naturally)
+                if (animator != null)
+                {
+                    animator.SetTrigger(AnimDash);
+                }
+                
                 dashDir = new Vector3(wishDir.x, 0f, wishDir.z).normalized;
                 strength = gasDashForce * 2f;
             }
@@ -579,6 +663,9 @@ namespace Harp.ODMLogic
                 isUsingGas = false;
             }
 
+            // Reset reeling state each frame
+            isReeling = false;
+
             // Hook reeling
             if (_isProperlyHooked)
             {
@@ -593,10 +680,6 @@ namespace Harp.ODMLogic
                     ReelInHook(1);
                     isReeling = true;
                 }
-            }
-            else
-            {
-                isReeling = false;
             }
         }
 
@@ -658,6 +741,7 @@ namespace Harp.ODMLogic
 
                     player.CurrentState = dash;
                     cameralook.FovBurst(15);
+                    cameralook.DistanceBurst(3);
                     boostDir = playerCameraTransform.forward.normalized;
                     UseGas(100);
                     player.Rigidbody.AddForce(boostDir * boostImpulseForce, ForceMode.Impulse);
@@ -683,6 +767,7 @@ namespace Harp.ODMLogic
 
         void ReelInHook(int hookIndex)
         {
+            
             cameralook.FovBurst(0.12f);
 
             //if grounded and reeling, force slide state
@@ -696,6 +781,7 @@ namespace Harp.ODMLogic
             if (_isProperlyHooked && _isBoosting && !isOrbiting)
             {
                 targetReelInForce = hookBoostReelInForce;
+                
                 StartOdmGasVFX();
             }
             else
@@ -721,8 +807,8 @@ namespace Harp.ODMLogic
             if (distanceFromPoint > 0.0f)
             {
                 //This handles the players vertical and horizontal velocity change upon entering a new reel from previous velocity
-                divider = Mathf.Lerp(divider, PL_ResourceManagement.MapToRange(distanceFromPoint, 0, hookMaxDistance, 0.1f, 0.01f), Time.deltaTime * 4f);
-                Vector3 reelForceBasedOnDistance = (hookSwingPoints[hookIndex] - transform.position).normalized * (hookCurrentReelInForce * divider);
+                _divider = Mathf.Lerp(_divider, PL_ResourceManagement.MapToRange(distanceFromPoint, 0, hookMaxDistance, 0.1f, 0.01f), Time.deltaTime * 4f);
+                Vector3 reelForceBasedOnDistance = (hookSwingPoints[hookIndex] - transform.position).normalized * (hookCurrentReelInForce * _divider);
                 Vector3 newVelocity = Vector3.Lerp(previousVelocity, reelForceBasedOnDistance, Time.deltaTime * reelVelocityLerp); // Smoothly transition[The greater the f value the stronger the lerp]
 
                 player.Rigidbody.velocity = newVelocity; // Apply smooth transition
@@ -823,6 +909,9 @@ namespace Harp.ODMLogic
             PlayHookFireSound(hookFireAudioSources[hookIndex], hookFireAudioClips[0]);
 
             hookCooldownTimes[hookIndex] = hookFireCooldownTimeBase;
+            
+            
+
             reelingInOutState[hookIndex] = 0;
 
             if (_hookPredictionHits[hookIndex].point == Vector3.zero) return;
@@ -907,6 +996,11 @@ namespace Harp.ODMLogic
             }
 
             reelingInOutState[hookIndex] = 1;
+            
+            if (animator != null)
+            {
+                animator.SetTrigger(AnimHookLatch);
+            }
 
             if (hookJoints[hookIndex] && !hooksLatchAudioSources[hookIndex].isPlaying)
             {
@@ -936,6 +1030,7 @@ namespace Harp.ODMLogic
         void StopHook(int hookIndex)
         {
             reelingInOutState[hookIndex] = 3;
+            hooksReady[hookIndex] = true;
 
             Destroy(hookJoints[hookIndex]);
 

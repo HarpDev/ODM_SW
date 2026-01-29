@@ -18,8 +18,8 @@ namespace Harp.Equestian
         [FormerlySerializedAs("ODM")] public PL_ODM odm; // this is needed as most camera tilt effects are based on ODM traversal
         public PlayerMotor player;
         [FormerlySerializedAs("Cam")] public Camera cam;
-        [Header("Orbit Settings")]
-        public float distance = 3.5f;
+        [FormerlySerializedAs("distance")] [Header("Orbit Settings")]
+        public float baseDistance = 3.5f;
         public float height = 1.6f;
         public float minPitch = -30f;
         public float maxPitch = 60f;
@@ -42,6 +42,14 @@ namespace Harp.Equestian
         [Header("Dynamic FOV Settings")]
         public float dynamicSmoothTime = 0.5f;
         public float dynamicDecayRate = 5f;
+        [Header("Dynamic Distance Settings")]
+        public float dynamicDistanceSmoothTime = 0.5f;
+        public float dynamicDistanceDecayRate = 5f;
+
+        private float _currentDistance;
+        float _currentDynamicDistance;
+        float _dynamicDistanceTarget;
+        float _distanceVel;
         [Header("Optional")]
         public bool lockCursor = true;
 
@@ -87,6 +95,7 @@ namespace Harp.Equestian
             PerformCameraTiltFunctionality();
             PerformShoulderSwapFunctionality();
             PerformFOVAdjustments();
+            PerformDistanceAdjustments();
 
             _currSens = Sensitivity;
             foreach (OverrideLayer layer in Overrides)
@@ -110,7 +119,7 @@ namespace Harp.Equestian
                 Vector3 pivotPos = cameraPivot.position + Vector3.up * height;
                 Quaternion baseRot = Quaternion.Euler(_pitch, _yaw, 0f);
                 Quaternion rot = baseRot * tiltTarget.localRotation;
-                Vector3 offset = Vector3.back * distance + Vector3.right * _currentShoulderOffset;
+                Vector3 offset = Vector3.back * _currentDistance  + Vector3.right * _currentShoulderOffset;
                 Vector3 desiredCamPos = pivotPos + rot * offset;
                 // collision check to prevent clipping
                 if (Physics.Linecast(pivotPos, desiredCamPos, out RaycastHit hit, ~0, QueryTriggerInteraction.Ignore))
@@ -192,9 +201,27 @@ namespace Harp.Equestian
             _currentDynamicFOV = Mathf.SmoothDamp(_currentDynamicFOV, _dynamicFOVTarget, ref _dynamicVel, dynamicSmoothTime);
             _dynamicFOVTarget = Mathf.Max(0f, _dynamicFOVTarget - dynamicDecayRate * Time.deltaTime);
         }
-        private void FixedUpdate()
+
+        private void PerformDistanceAdjustments()
         {
+
+            _currentDistance = _currentDynamicDistance + baseDistance;
+            _currentDynamicDistance = Mathf.SmoothDamp(
+                _currentDynamicDistance,
+                _dynamicDistanceTarget,
+                ref _distanceVel,
+                dynamicDistanceSmoothTime
+            );
+
+            _dynamicDistanceTarget = Mathf.MoveTowards(
+                _dynamicDistanceTarget,
+                0f,
+                dynamicDistanceDecayRate * Time.deltaTime
+            );
         }
+
+
+
         public static void RemoveOverride(OverrideLayer layer) => Overrides.Remove(layer);
         public static OverrideLayer SetOverride(float value, int weight)
         {
@@ -204,11 +231,17 @@ namespace Harp.Equestian
             return layer;
         }
         public float Sensitivity => SettingsManager.Current.TrySetting("Sensitivity", out SingleSetting<float> sens) ? sens.Value : sensitivity;
+        
         public void FovBurst(float amount)
         {
-            if (cam.fieldOfView <= 110)
-            _dynamicFOVTarget += amount;
+            if (cam.fieldOfView <= 110) _dynamicFOVTarget += amount;
         }
+        public void DistanceBurst(float amount)
+        {
+            _dynamicDistanceTarget += amount;
+        }
+
+
         public class OverrideLayer
         {
             public float Sensitivity;
