@@ -556,7 +556,7 @@ namespace Harp.ODMLogic
             Vector3 previousVelocity = player.Rigidbody.velocity; // Store current velocity
             Vector3 currentVelocity = player.Rigidbody.velocity.normalized;
             Vector3.Lerp(previousVelocity, currentVelocity, Time.deltaTime * reelOrbitLerp);
-            // player.Rigidbody.velocity = newVelocity; // Apply smooth transition
+            
 
             yield break;
         }
@@ -576,27 +576,27 @@ namespace Harp.ODMLogic
                 case 0: // RIGHT Orbit (clockwise around vertical axis)
                     StartCoroutine(OrbitVelocityChange());
                     tangent = Vector3.Cross(toPlayer, orbitAxis).normalized; // Right-hand rule: clockwise when viewed from above
-                    player.Rigidbody.AddForce(tangent * gasDashForce / 20f, ForceMode.VelocityChange);
+                    player.Rigidbody.AddForce(tangent * gasDashForce / 35f, ForceMode.VelocityChange);
                     break;
 
                 case 1: // LEFT Orbit (counter-clockwise around vertical axis)
                     StartCoroutine(OrbitVelocityChange());
                     tangent = Vector3.Cross(orbitAxis, toPlayer).normalized; // Counter-clockwise
-                    player.Rigidbody.AddForce(tangent * gasDashForce / 20f, ForceMode.VelocityChange);
+                    player.Rigidbody.AddForce(tangent * gasDashForce / 35f, ForceMode.VelocityChange);
                     break;
 
                 case 2: // DOWN Orbit (clockwise around camera right axis)
                     StartCoroutine(OrbitVelocityChange());
                     orbitAxis = playerCameraTransform.right; // Orbit around camera's right axis
                     tangent = Vector3.Cross(toPlayer, orbitAxis).normalized; // Clockwise when viewed along right axis
-                    player.Rigidbody.AddForce(tangent * gasDashForce / 20f, ForceMode.VelocityChange);
+                    player.Rigidbody.AddForce(tangent * gasDashForce / 35f, ForceMode.VelocityChange);
                     break;
 
                 case 3: // UP Orbit (counter-clockwise around camera right axis)
                     StartCoroutine(OrbitVelocityChange());
                     orbitAxis = playerCameraTransform.right;
                     tangent = Vector3.Cross(orbitAxis, toPlayer).normalized; // Counter-clockwise
-                    player.Rigidbody.AddForce(tangent * gasDashForce / 20f, ForceMode.VelocityChange);
+                    player.Rigidbody.AddForce(tangent * gasDashForce / 35f, ForceMode.VelocityChange);
                     break;
             }
 
