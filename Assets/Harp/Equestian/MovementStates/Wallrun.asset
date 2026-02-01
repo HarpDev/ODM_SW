@@ -15,20 +15,38 @@ MonoBehaviour:
   ExitState: {fileID: 11400000, guid: 354a082a6bc46c241b2557133353c573, type: 2}
   WallrunSoundVolumeControl:
     serializedVersion: 2
-    m_Curve: []
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 34
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 34
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
   WallrunSpeed: 12.74
   WallJumpSpeed: 3.18
   WallJumpVerticalSpeed: 2.49
-  RequiredVelocity: 10
-  AttachSpeed: 0
-  AttachDistance: 0
-  Drag: 0
-  TiltDegrees: 0
+  RequiredVelocity: 1
+  AttachSpeed: 33.65
+  AttachDistance: 5.75
+  Drag: 3.19
+  TiltDegrees: 3.6
   AttachVerticalMultiplier: 0.2
   Layer:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 1
   PositionOffset: {x: 0, y: 0, z: 0}

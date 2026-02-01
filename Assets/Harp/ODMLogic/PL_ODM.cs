@@ -576,7 +576,7 @@ namespace Harp.ODMLogic
                 case 0: // RIGHT Orbit (clockwise around vertical axis)
                     StartCoroutine(OrbitVelocityChange());
                     tangent = Vector3.Cross(toPlayer, orbitAxis).normalized; // Right-hand rule: clockwise when viewed from above
-                    player.Rigidbody.AddForce(tangent * gasDashForce / 35f, ForceMode.VelocityChange);
+                    player.Rigidbody.AddForce(tangent * gasDashForce / 35f, ForceMode.Impulse);
                     break;
 
                 case 1: // LEFT Orbit (counter-clockwise around vertical axis)
