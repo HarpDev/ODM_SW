@@ -80,7 +80,7 @@ namespace Harp.ODMLogic
         [Header("Logic Hook Separation")]
         public float separation = 0;
         public float maxAngle = 45f;
-        public float currentSeparation = 0.2f;
+        public float currentSeparation = 0f;
 
         [Header("Logic Dash")]
         public float dashTimer = 1f;
@@ -778,7 +778,7 @@ namespace Harp.ODMLogic
 
             float targetReelInForce;
 
-            if (_isProperlyHooked && _isBoosting && !isOrbiting)
+            if (_isProperlyHooked && _isBoosting)
             {
                 targetReelInForce = hookBoostReelInForce;
                 
