@@ -8,4 +8,70 @@ AvatarMask:
   m_PrefabAsset: {fileID: 0}
   m_Name: PlayerAvatarMask
   m_Mask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
-  m_Elements: []
+  m_Elements:
+  - m_Path: 
+    m_Weight: 1
+  - m_Path: Armature
+    m_Weight: 1
+  - m_Path: Armature/Root
+    m_Weight: 1
+  - m_Path: Armature/Root/MainController
+    m_Weight: 1
+  - m_Path: Armature/Root/MainController/Foot_L_Ik
+    m_Weight: 1
+  - m_Path: Armature/Root/MainController/Foot_R_Ik
+    m_Weight: 1
+  - m_Path: Armature/Root/MainController/Leg_Ik_Pole_L
+    m_Weight: 1
+  - m_Path: Armature/Root/MainController/Leg_Ik_Pole_R
+    m_Weight: 1
+  - m_Path: Armature/Root/MainController/LookAt
+    m_Weight: 1
+  - m_Path: Armature/Root/MainController/Torso
+    m_Weight: 1
+  - m_Path: Armature/Root/MainController/Torso/Arm_L
+    m_Weight: 1
+  - m_Path: Armature/Root/MainController/Torso/Arm_R
+    m_Weight: 1
+  - m_Path: Armature/Root/MainController/Torso/Armor_Front_Torso
+    m_Weight: 1
+  - m_Path: Armature/Root/MainController/Torso/Canister_Back_Torso
+    m_Weight: 1
+  - m_Path: Armature/Root/MainController/Torso/Canister_Back_Torso/Blade_Holder_L
+    m_Weight: 1
+  - m_Path: Armature/Root/MainController/Torso/Canister_Back_Torso/Blade_Holder_R
+    m_Weight: 1
+  - m_Path: Armature/Root/MainController/Torso/Canister_Back_Torso/Torso_Booster_L
+    m_Weight: 1
+  - m_Path: Armature/Root/MainController/Torso/Canister_Back_Torso/Torso_Booster_R
+    m_Weight: 1
+  - m_Path: Armature/Root/MainController/Torso/Femur_L
+    m_Weight: 1
+  - m_Path: Armature/Root/MainController/Torso/Femur_L/Fibula_L
+    m_Weight: 1
+  - m_Path: Armature/Root/MainController/Torso/Femur_L/Fibula_L/Leg_L
+    m_Weight: 1
+  - m_Path: Armature/Root/MainController/Torso/Femur_L/Fibula_L/Leg_L/Booster_L
+    m_Weight: 1
+  - m_Path: Armature/Root/MainController/Torso/Femur_R
+    m_Weight: 1
+  - m_Path: Armature/Root/MainController/Torso/Femur_R/Fibula_R
+    m_Weight: 1
+  - m_Path: Armature/Root/MainController/Torso/Femur_R/Fibula_R/Leg_R
+    m_Weight: 1
+  - m_Path: Armature/Root/MainController/Torso/Femur_R/Fibula_R/Leg_R/Booster_R
+    m_Weight: 1
+  - m_Path: Armature/Root/MainController/Torso/Head
+    m_Weight: 1
+  - m_Path: Armature/Root/MainController/Weapon_Handle_MASTER
+    m_Weight: 1
+  - m_Path: Armature/Root/MainController/Weapon_Handle_MASTER/Handle
+    m_Weight: 1
+  - m_Path: Armature/Root/MainController/Weapon_Handle_MASTER/Handle/Blade_Handle
+    m_Weight: 1
+  - m_Path: Armature/Root/MainController/Weapon_Handle_MASTER/Handle/Heavy_Blade_Handle
+    m_Weight: 1
+  - m_Path: Armature/Root/MainController/Weapon_Handle_MASTER/Handle/Heavy_Blade_Handle/Heavy_Blade
+    m_Weight: 1
+  - m_Path: mesh.018
+    m_Weight: 1
