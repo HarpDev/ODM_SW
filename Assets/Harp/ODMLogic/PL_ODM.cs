@@ -7,8 +7,6 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.Serialization;
 
-//using Unity.VisualScripting.Dependencies.Sqlite;
-
 namespace Harp.ODMLogic
 {
     public class PL_ODM : MonoBehaviour
@@ -101,6 +99,10 @@ namespace Harp.ODMLogic
         public List<Transform> hookStartTransforms = new List<Transform>(new Transform[] { null, null });
         public List<SpringJoint> hookJoints = new List<SpringJoint>(new SpringJoint[] { null, null });
 
+        [Header("Logic Hook Durability")]
+        public float maxHookDurability = 4f; // Time in seconds before hook auto-releases
+        public List<float> hookDurabilityTimers = new List<float>(new float[] { 0f, 0f }); // Current durability remaining
+
         [Header("Hook Fire Visual")]
         public List<LineRenderer> hookWireRenderers = new List<LineRenderer>(new LineRenderer[] { null, null });
 
@@ -113,32 +115,34 @@ namespace Harp.ODMLogic
         public LayerMask nonGrappleSurfaces;
         public float predictionSeparationNegation = 8f;
         public float predictionSphereRadius = 15f;
+        public float currentPredictionSphereRadius;
         private List<RaycastHit> _hookPredictionHits = new List<RaycastHit>(new RaycastHit[] { new RaycastHit(), new RaycastHit() });
 
         [Header("UI Prediction")]
         public List<UnityEngine.UI.Image> hookCrosshairs;
         public List<UnityEngine.UI.Image> hookStaticCrosshairs;
+        public GameObject autoHookNotifier;
+
+        [Header("UI Hook Durability")]
+        public List<UnityEngine.UI.Image> hookDurabilityFillImages; // Radial fill images showing durability
 
         [Header("UI Gas")]
         public UnityEngine.UI.Image gasUI;
 
-        [FormerlySerializedAs("SpeedText")]
-        [Header("UI Speed")]
-        public TMP_Text speedText;
-
+    
         [Header("UI Dash Cooldown")]
         public UnityEngine.UI.Image dashCooldownImage;
 
         // Private fields for boost logic
         private float _lastSpacePressTime = -Mathf.Infinity;
-        private bool _isBoosting;
+      
+        [Header("Animation")]
+        [SerializeField] private Animator animator;
+  private bool _isBoosting;
         private bool _wasBoosting;
 
         
         
-        [Header("Animation")]
-        [SerializeField] private Animator animator;
-
         // Cached parameter hashes (avoid string lookups)
         private static readonly int AnimSpeed = Animator.StringToHash("Speed");
         private static readonly int AnimGrounded = Animator.StringToHash("Grounded");
@@ -160,7 +164,7 @@ namespace Harp.ODMLogic
         void Update()
         {
             currentSpeed = Mathf.Ceil(player.Rigidbody.velocity.magnitude);
-            speedText.text = currentSpeed.ToString(CultureInfo.CurrentCulture) + " m/s";
+           
 
             // --- Animation locomotion feed ---
             UpdateAnimationParameters();
@@ -175,7 +179,9 @@ namespace Harp.ODMLogic
             
             UpdateCooldownTimers();
             UpdateDashTimers();
+            UpdateDurabilityTimers();
             UpdateDashUI();
+            UpdateDurabilityUI();
 
             CheckInputUpdate();
 
@@ -239,6 +245,39 @@ namespace Harp.ODMLogic
             }
         }
 
+        private void UpdateDurabilityUI()
+        {
+            if (hookDurabilityFillImages == null || hookDurabilityFillImages.Count < 2) return;
+
+            // Update left hook durability UI
+            if (hookDurabilityFillImages[0] != null)
+            {
+                if (reelingInOutState[0] == 1 && hookJoints[0]) // Hook is attached
+                {
+                    hookDurabilityFillImages[0].fillAmount = hookDurabilityTimers[0] / maxHookDurability;
+                    hookDurabilityFillImages[0].gameObject.SetActive(true);
+                }
+                else
+                {
+                    hookDurabilityFillImages[0].gameObject.SetActive(false);
+                }
+            }
+
+            // Update right hook durability UI
+            if (hookDurabilityFillImages[1] != null)
+            {
+                if (reelingInOutState[1] == 1 && hookJoints[1]) // Hook is attached
+                {
+                    hookDurabilityFillImages[1].fillAmount = hookDurabilityTimers[1] / maxHookDurability;
+                    hookDurabilityFillImages[1].gameObject.SetActive(true);
+                }
+                else
+                {
+                    hookDurabilityFillImages[1].gameObject.SetActive(false);
+                }
+            }
+        }
+
         void FixedUpdate()
         {
             OrbitInputUpdate();
@@ -286,6 +325,31 @@ namespace Harp.ODMLogic
             }
         }
 
+        void UpdateDurabilityTimers()
+        {
+            // Update durability for left hook (index 0)
+            if (reelingInOutState[0] == 1 && hookJoints[0]) // Hook is attached
+            {
+                hookDurabilityTimers[0] -= Time.deltaTime;
+                
+                if (hookDurabilityTimers[0] <= 0f)
+                {
+                    StopHook(0); // Auto-release when durability depleted
+                }
+            }
+
+            // Update durability for right hook (index 1)
+            if (reelingInOutState[1] == 1 && hookJoints[1]) // Hook is attached
+            {
+                hookDurabilityTimers[1] -= Time.deltaTime;
+                
+                if (hookDurabilityTimers[1] <= 0f)
+                {
+                    StopHook(1); // Auto-release when durability depleted
+                }
+            }
+        }
+
         // =====================================================================================
         // PREDICTION METHODS
         // =====================================================================================
@@ -312,12 +376,12 @@ namespace Harp.ODMLogic
             // Shoot hooks based on the current index
             if (hookIndex == 0) // Left hook
             {
-                Physics.SphereCast(playerCameraTransform.position, predictionSphereRadius, leftDirection, out spherecastHit, hookMaxDistance, grappleSurfaces);
+                Physics.SphereCast(playerCameraTransform.position, currentPredictionSphereRadius, leftDirection, out spherecastHit, hookMaxDistance, grappleSurfaces);
                 Physics.Raycast(playerCameraTransform.position, leftDirection, out raycastHit, hookMaxDistance, grappleSurfaces);
             }
             else if (hookIndex == 1) // Right hook
             {
-                Physics.SphereCast(playerCameraTransform.position, predictionSphereRadius, rightDirection, out spherecastHit, hookMaxDistance, grappleSurfaces);
+                Physics.SphereCast(playerCameraTransform.position, currentPredictionSphereRadius, rightDirection, out spherecastHit, hookMaxDistance, grappleSurfaces);
                 Physics.Raycast(playerCameraTransform.position, rightDirection, out raycastHit, hookMaxDistance, grappleSurfaces);
             }
 
@@ -361,8 +425,6 @@ namespace Harp.ODMLogic
 
         private static float MapToRange(float value, float minInput, float maxInput, float minOutput, float maxOutput)
         {
-            //Debug.Log("CONVERTING");
-
             // Ensure the value is clamped within the input range
             value = Mathf.Clamp(value, minInput, maxInput);
 
@@ -450,6 +512,19 @@ namespace Harp.ODMLogic
             else if (currentSeparation <= 0.1f)
             {
                 currentSeparation = 0;
+                
+            }
+            
+            //prediction disable when crosshairs linked 
+            if (currentSeparation <= 0.06f)
+            {
+                currentPredictionSphereRadius = 0;
+                autoHookNotifier.SetActive(false);
+            }
+            else
+            {
+                currentPredictionSphereRadius = predictionSphereRadius;
+                autoHookNotifier.SetActive(true);
             }
 
             // Hook fire detection
@@ -503,34 +578,28 @@ namespace Harp.ODMLogic
             {
                 if (Input.GetKey(KeyCode.W) && isReeling)//UP
                 {
-                    HandleOrbitNoDoubleTap(3);
+                    PerformOrbit(3);
                     isOrbiting = true;
                 }
 
                 if (Input.GetKey(KeyCode.S) && isReeling)//DOWN
                 {
-                    HandleOrbitNoDoubleTap(2);
+                    PerformOrbit(2);
                     isOrbiting = true;
                 }
 
                 if (Input.GetKey(KeyCode.A) && isReeling)//LEFt
                 {
-                    HandleOrbitNoDoubleTap(1);
+                    PerformOrbit(1);
                     isOrbiting = true;
                 }
 
                 if (Input.GetKey(KeyCode.D) && isReeling)//RIGHT
                 {
-                    HandleOrbitNoDoubleTap(0);
+                    PerformOrbit(0);
                     isOrbiting = true;
                 }
             }
-        }
-
-        void HandleOrbitNoDoubleTap(int buttonIndex)
-        {
-            PerformOrbit(buttonIndex);
-            //dashTimer = dashCooldown;
         }
 
         Vector3 GetOrbitCenter()
@@ -551,16 +620,6 @@ namespace Harp.ODMLogic
             return Vector3.zero; // Fallback to zero if no hooks are active
         }
 
-        IEnumerator OrbitVelocityChange()
-        {
-            Vector3 previousVelocity = player.Rigidbody.velocity; // Store current velocity
-            Vector3 currentVelocity = player.Rigidbody.velocity.normalized;
-            Vector3.Lerp(previousVelocity, currentVelocity, Time.deltaTime * reelOrbitLerp);
-            
-
-            yield break;
-        }
-
         void PerformOrbit(int buttonIndex)
         {
             if (currentGasAmount < 0) return;
@@ -574,26 +633,22 @@ namespace Harp.ODMLogic
             switch (buttonIndex)
             {
                 case 0: // RIGHT Orbit (clockwise around vertical axis)
-                    StartCoroutine(OrbitVelocityChange());
                     tangent = Vector3.Cross(toPlayer, orbitAxis).normalized; // Right-hand rule: clockwise when viewed from above
                     player.Rigidbody.AddForce(tangent * gasDashForce / 35f, ForceMode.Impulse);
                     break;
 
                 case 1: // LEFT Orbit (counter-clockwise around vertical axis)
-                    StartCoroutine(OrbitVelocityChange());
                     tangent = Vector3.Cross(orbitAxis, toPlayer).normalized; // Counter-clockwise
                     player.Rigidbody.AddForce(tangent * gasDashForce / 35f, ForceMode.VelocityChange);
                     break;
 
                 case 2: // DOWN Orbit (clockwise around camera right axis)
-                    StartCoroutine(OrbitVelocityChange());
                     orbitAxis = playerCameraTransform.right; // Orbit around camera's right axis
                     tangent = Vector3.Cross(toPlayer, orbitAxis).normalized; // Clockwise when viewed along right axis
                     player.Rigidbody.AddForce(tangent * gasDashForce / 35f, ForceMode.VelocityChange);
                     break;
 
                 case 3: // UP Orbit (counter-clockwise around camera right axis)
-                    StartCoroutine(OrbitVelocityChange());
                     orbitAxis = playerCameraTransform.right;
                     tangent = Vector3.Cross(orbitAxis, toPlayer).normalized; // Counter-clockwise
                     player.Rigidbody.AddForce(tangent * gasDashForce / 35f, ForceMode.VelocityChange);
@@ -603,7 +658,6 @@ namespace Harp.ODMLogic
             currentGasAmount -= gasDashForce / 100;
             gasDashParticles.Emit(120);
             gasDashParticles.Play();
-            //gasDashAudioSource.Play();//this needs to be changed to an orbit sound effect instead of reusing reel boost
         }
 
         void PerformAirDash(Vector3 wishDir)
@@ -643,7 +697,6 @@ namespace Harp.ODMLogic
 
             gasDashParticles.Emit(120);
             gasDashParticles.Play();
-            // gasDashAudioSource.Play();
         }
 
         // =====================================================================================
@@ -730,7 +783,6 @@ namespace Harp.ODMLogic
                     currentGasAmount -= gasDashForce / 100f;
                     gasDashParticles.Emit(120);
                     gasDashParticles.Play();
-                    // gasDashAudioSource.Play(); // Uncomment if desired
                 }
                 else
                 {
@@ -748,7 +800,6 @@ namespace Harp.ODMLogic
                     currentGasAmount -= gasDashForce / 100f;
                     gasDashParticles.Emit(120);
                     gasDashParticles.Play();
-                    // gasDashAudioSource.Play(); // Uncomment if desired
 
                     dashTimer = dashCooldown; // Start cooldown
                 }
@@ -768,7 +819,8 @@ namespace Harp.ODMLogic
         void ReelInHook(int hookIndex)
         {
             
-            cameralook.FovBurst(0.12f);
+            cameralook.FovBurst(0.05f);
+            cameralook.DistanceBurst(0.05f);
 
             //if grounded and reeling, force slide state
             if (player.IsGrounded)
@@ -802,8 +854,6 @@ namespace Harp.ODMLogic
 
             float distanceFromPoint = Vector3.Distance(transform.position, hookSwingPoints[hookIndex]);
 
-            //float targetMaxDistance = Mathf.Max(0.1f, distanceFromPoint * 0.7f); REDUNDANT OPERATOR
-
             if (distanceFromPoint > 0.0f)
             {
                 //This handles the players vertical and horizontal velocity change upon entering a new reel from previous velocity
@@ -814,7 +864,6 @@ namespace Harp.ODMLogic
                 player.Rigidbody.velocity = newVelocity; // Apply smooth transition
                 player.Rigidbody.AddForce(player.Rigidbody.transform.up * 0.1f, ForceMode.VelocityChange);
             }
-            else Debug.Log("hook too short");
 
             currentGasAmount -= 0.1f;
         }
@@ -909,7 +958,7 @@ namespace Harp.ODMLogic
             PlayHookFireSound(hookFireAudioSources[hookIndex], hookFireAudioClips[0]);
 
             hookCooldownTimes[hookIndex] = hookFireCooldownTimeBase;
-            
+            cameralook.FovBurst(3f);
             
 
             reelingInOutState[hookIndex] = 0;
@@ -945,11 +994,6 @@ namespace Harp.ODMLogic
             if (currentGasAmount > 0 && player.IsGrounded == false)
             {
                 player.Rigidbody.AddForce(player.Rigidbody.transform.up * gasDashForce / 2f, ForceMode.VelocityChange);
-
-                //refresh dubleJump
-                if (!player.IsGrounded == false)
-                {
-                }
             }
         }
 
@@ -997,6 +1041,9 @@ namespace Harp.ODMLogic
 
             reelingInOutState[hookIndex] = 1;
             
+            // Initialize durability timer when hook latches
+            hookDurabilityTimers[hookIndex] = maxHookDurability;
+            
             if (animator != null)
             {
                 animator.SetTrigger(AnimHookLatch);
@@ -1031,6 +1078,9 @@ namespace Harp.ODMLogic
         {
             reelingInOutState[hookIndex] = 3;
             hooksReady[hookIndex] = true;
+
+            // Reset durability timer
+            hookDurabilityTimers[hookIndex] = 0f;
 
             Destroy(hookJoints[hookIndex]);
 

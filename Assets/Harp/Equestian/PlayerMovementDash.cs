@@ -36,11 +36,11 @@ namespace Player.Movement
         public override void TickUpdate(PlayerMotor parent)
         {
             base.TickUpdate(parent);
-            if (motor.Camera == null)
+            if (motor.camera == null)
                 direction = parent.transform.forward;
             else
             {
-                direction = motor.Camera.forward.normalized;
+                direction = motor.camera.forward.normalized;
             }
             canDashJump = timer > 0f;
             if (timer > 0f)

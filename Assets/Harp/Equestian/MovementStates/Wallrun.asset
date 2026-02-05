@@ -37,15 +37,15 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  WallrunSpeed: 12.74
-  WallJumpSpeed: 3.18
-  WallJumpVerticalSpeed: 2.49
-  RequiredVelocity: 1
-  AttachSpeed: 33.65
-  AttachDistance: 5.75
-  Drag: 3.19
-  TiltDegrees: 3.6
-  AttachVerticalMultiplier: 0.2
+  WallrunSpeed: 0.01
+  WallJumpSpeed: 13
+  WallJumpVerticalSpeed: 13
+  RequiredVelocity: 50
+  AttachSpeed: 1
+  AttachDistance: 1
+  Drag: 1.5
+  TiltDegrees: 14
+  AttachVerticalMultiplier: 0.5
   Layer:
     serializedVersion: 2
     m_Bits: 1

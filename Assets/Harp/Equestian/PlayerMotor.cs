@@ -5,6 +5,7 @@ using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 using Harp.ODMLogic;
+using UnityEngine.Serialization;
 
 namespace Player.Movement
 {
@@ -17,8 +18,8 @@ namespace Player.Movement
         #endregion
 
         #region Serialized Fields
-        [Header("Third Person Orientation")]
-        public Transform Camera;
+        [FormerlySerializedAs("Camera")] [Header("Third Person Orientation")]
+        public Transform camera;
         public float GroundRotationSpeed = 12f;
         public float AirborneRotationSpeed = 6f;
 
@@ -38,6 +39,10 @@ namespace Player.Movement
         public AudioSource[] Audio;
         public ParticleSystem[] Particles;
         public float currentSpeed;
+        
+        [Header("Animation")]
+         public Animator animator;
+         public static readonly int AnimJump = Animator.StringToHash("Jump");
         #endregion
 
         #region Hidden Fields
@@ -128,10 +133,10 @@ namespace Player.Movement
             TargetCameraHeight = OriginalCameraHeight;
             if (DefaultState == null)
                 enabled = false;
-            if (Camera == null)
+            if (camera == null)
             {
-                Camera = CameraRoot.GetComponentInChildren<Camera>()?.transform;
-                if (Camera == null)
+                camera = CameraRoot.GetComponentInChildren<Camera>()?.transform;
+                if (camera == null)
                     Debug.LogWarning("PlayerMotor: No Camera assigned or found! Movement will be broken.");
             }
         }
@@ -175,7 +180,7 @@ namespace Player.Movement
             while (true)
             {
                 currentSpeed = Mathf.Ceil(Rigidbody.velocity.magnitude);
-                yield return new WaitForSeconds(1f);
+                yield return new WaitForSeconds(0.1f);
             }
         }
         #endregion
@@ -183,11 +188,11 @@ namespace Player.Movement
         #region Public Methods
         public Vector3 GetWishDir()
         {
-            if (Camera == null) return Vector3.zero;
+            if (camera == null) return Vector3.zero;
             float h = Input.GetAxisRaw("Horizontal");
             float v = Input.GetAxisRaw("Vertical");
-            Vector3 camForward = Camera.forward;
-            Vector3 camRight = Camera.right;
+            Vector3 camForward = camera.forward;
+            Vector3 camRight = camera.right;
             camForward.y = 0f;
             camRight.y = 0f;
             camForward = camForward.normalized;
@@ -206,9 +211,15 @@ namespace Player.Movement
             if (IsGrounded && Physics.Raycast(GroundPoint.position + Vector3.up, Vector3.down, out RaycastHit hit, 2f, GroundLayers, QueryTriggerInteraction.Ignore))
                 return hit.normal;
             return Vector3.zero;
+           
         }
 
         public bool GetWishJump() => Input.GetKeyDown(KeyCode.Space);
+
+        public void CallJumpAnimation()
+        {
+            animator.SetTrigger("Jump");
+        }
 
         public void PlayMotorSound(int index)
         {
@@ -247,17 +258,26 @@ namespace Player.Movement
             au = GetParticle(index);
             return au != null;
         }
+
+        public void TriggerJumpAnimation()
+        {
+            if (animator != null)
+            {
+                animator.SetTrigger(AnimJump);
+                animator.SetTrigger(AnimJump);
+            }
+        }
         #endregion
 
         #region Private Methods
         private void HandleCameraFacingRotation()
         {
-            if (Camera == null || ODM.isReeling) return;
+            if (camera == null || ODM.isReeling) return;
             Vector3 wishDir = GetWishDir();
             bool hasInput = wishDir.magnitude >= 0.1f;
             // For grounded, skip if no input; for air, always rotate
             if (IsGrounded && !hasInput) return;
-            Vector3 camForward = Camera.forward;
+            Vector3 camForward = camera.forward;
             camForward.y = 0f;
             if (camForward.sqrMagnitude < 0.0001f) return;
             camForward.Normalize();

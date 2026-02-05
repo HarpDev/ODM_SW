@@ -176,6 +176,7 @@ namespace Player.Movement
 
         public bool TryWallKick(PlayerMotor parent)
         {
+            
             if (wallKickCount >= WallKickMax)
                 return false;
 
@@ -185,7 +186,7 @@ namespace Player.Movement
             for (int i = 0; i < WallKickRaycastIterations; i++)
                 if (Physics.Raycast(parent.transform.position + Vector3.up * 1.4f, GetWallKickDirectionRaycast(parent, 360f / WallKickRaycastIterations * i), out RaycastHit hit, WallKickDistance, parent.GroundLayers, QueryTriggerInteraction.Ignore) && !blacklist.ContainsKey(hit.collider))
                     blacklist.Add(hit.collider, hit);
-
+                        
             if (blacklist.Count == 0)
                 return false;
 
@@ -193,7 +194,7 @@ namespace Player.Movement
             doubleJump = false;
 
             wallKickCount++;
-
+            parent.CallJumpAnimation();//play jump anim on successfull wallkick
             parent.PlayMotorSound(1);
 
             onWallKick?.Invoke();

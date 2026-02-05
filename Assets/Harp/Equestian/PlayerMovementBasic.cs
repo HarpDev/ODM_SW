@@ -38,12 +38,13 @@ namespace Player.Movement
         {
             if (parent.GetWishJump())
                 CurrentJumpBuffer = JumpBuffer;
+            
         }
 
         public override void TickUpdate(PlayerMotor parent)
         {
             parent.Rigidbody.AddForce(Vector3.up * Gravity);
-
+        
             if (Input.GetKey(KeyCode.LeftShift) && parent.IsGrounded)//Running
             {
                 Movement(parent, GasSpeed, ControlThreshold);
@@ -65,6 +66,7 @@ namespace Player.Movement
 
         public virtual void TryJump(PlayerMotor parent, float speed = -1f)
         {
+            parent.CallJumpAnimation();
             parent.RecentJumpTimer.Reset();
             CurrentJumpBuffer = 0f;
             SetGravity(parent, speed < 0f ? JumpSpeed : speed);

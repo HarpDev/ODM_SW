@@ -42,6 +42,7 @@ namespace Player.Movement
             {
                 if (parent.TryGetSound(3, out AudioSource au))
                 {
+                   
                     au.volume = WallrunSoundVolumeControl.Evaluate(parent.Rigidbody.velocity.magnitude);
                     if (!au.isPlaying)
                         au.Play();
@@ -49,6 +50,7 @@ namespace Player.Movement
 
                 if (jumpNextTick)
                 {
+                    parent.CallJumpAnimation();
                     parent.Rigidbody.AddForce(hit.normal * WallJumpSpeed, ForceMode.VelocityChange);
                     PlayerMovementBasic.SetGravity(parent, WallJumpVerticalSpeed);
                     jumpNextTick = false;
@@ -70,6 +72,7 @@ namespace Player.Movement
 
         public override void StateStarted(PlayerMotor parent)
         {
+            Debug.Log("wallrunning");
             originalDrag = parent.Rigidbody.drag;
             parent.Rigidbody.drag = Drag;
             PlayerMovementBasic.SetGravity(parent, parent.Rigidbody.velocity.y * AttachVerticalMultiplier);
