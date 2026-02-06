@@ -8,7 +8,8 @@ Material:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: M_ProtoGrid_05Bis
-  m_Shader: {fileID: -6465566751694194690, guid: 596b006d263f9954d864cb1b1e116a88, type: 3}
+  m_Shader: {fileID: -6465566751694194690, guid: 596b006d263f9954d864cb1b1e116a88,
+    type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
   m_ValidKeywords: []
@@ -224,17 +225,20 @@ Material:
     - _ZTestTransparent: 4
     - _ZWrite: 1
     m_Colors:
-    - Color_0d0db932ceca43669cdbbf811e5ec6df: {r: 0.5019608, g: 0.21146013, b: 0.039215688, a: 0}
+    - Color_0d0db932ceca43669cdbbf811e5ec6df: {r: 0.5019608, g: 0.21146013, b: 0.039215688,
+        a: 0}
     - Color_1: {r: 0.2627451, g: 0.03529412, b: 0.03529412, a: 0}
-    - Color_a1820c702c334315b08860d90b891942: {r: 0.039215688, g: 0.37569028, b: 0.5019608, a: 1}
+    - Color_a1820c702c334315b08860d90b891942: {r: 0.039215688, g: 0.37569028, b: 0.5019608,
+        a: 1}
     - Color_dce5cc796db748e687528717bc9c37d4: {r: 0.5333333, g: 0.765176, b: 1, a: 0}
-    - Color_dce5cc796db748e687528717bc9c37d4_1: {r: 1, g: 0.7306629, b: 0.25098038, a: 0}
-    - Color_dce5cc796db748e687528717bc9c37d4_2: {r: 0.76470596, g: 0.0627451, b: 0.0627451, a: 0}
+    - Color_dce5cc796db748e687528717bc9c37d4_1: {r: 1, g: 0.7306629, b: 0.25098038,
+        a: 0}
+    - Color_dce5cc796db748e687528717bc9c37d4_2: {r: 0.76470596, g: 0.0627451, b: 0.0627451,
+        a: 0}
     - Vector2_9aa173ac35f5492880df67007192af93: {r: 1.94, g: 1.05, b: 0, a: 0}
     - _DoubleSidedConstants: {r: 1, g: 1, b: -1, a: 0}
     - _EmissionColor: {r: 1, g: 1, b: 1, a: 1}
   m_BuildTextureStacks: []
-  m_AllowLocking: 1
 --- !u!114 &5565436010696077982
 MonoBehaviour:
   m_ObjectHideFlags: 11

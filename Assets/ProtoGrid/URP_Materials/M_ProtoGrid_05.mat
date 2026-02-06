@@ -21,7 +21,8 @@ Material:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: M_ProtoGrid_05
-  m_Shader: {fileID: -6465566751694194690, guid: 596b006d263f9954d864cb1b1e116a88, type: 3}
+  m_Shader: {fileID: -6465566751694194690, guid: 596b006d263f9954d864cb1b1e116a88,
+    type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
   m_ValidKeywords: []
@@ -43,7 +44,7 @@ Material:
     serializedVersion: 3
     m_TexEnvs:
     - Texture2D_10fc64325a0b443caba81a04cbe647cf:
-        m_Texture: {fileID: 2800000, guid: 1cfae3f79342bb441b7115981815ea26, type: 3}
+        m_Texture: {fileID: 2800000, guid: 229f3305569833b4a80dafac05e6cede, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - Texture2D_6331c4bf96a740f585a3638b9cbf8ded:
@@ -176,7 +177,7 @@ Material:
     - Vector1_57a019fbea31467cb6570bec8851d06a: 0.84
     - Vector1_7c044c5b6c4d49ea8ce02cca0787bcb2: 5
     - Vector1_8c7ee47a811749bea3603e1db1feca16: 2
-    - Vector1_8e2439f7354045a1b8e60483f62b3bd7: 1
+    - Vector1_8e2439f7354045a1b8e60483f62b3bd7: 13.63
     - Vector1_b04145d13dd644db98640c831a9ae827: 0.456
     - Vector1_b04145d13dd644db98640c831a9ae827_1: 1
     - Vector1_c6314feeee774511a1126bfc28bec311: 0.1
@@ -232,17 +233,19 @@ Material:
     - _ZTestTransparent: 4
     - _ZWrite: 1
     m_Colors:
-    - Color_0d0db932ceca43669cdbbf811e5ec6df: {r: 0.5019608, g: 0.21146013, b: 0.039215688, a: 0}
+    - Color_0d0db932ceca43669cdbbf811e5ec6df: {r: 0.39620313, g: 0.39620313, b: 0.39620313,
+        a: 0}
     - Color_1: {r: 0.2627451, g: 0.03529412, b: 0.03529412, a: 0}
-    - Color_a1820c702c334315b08860d90b891942: {r: 0.039215688, g: 0.37568927, b: 0.5019608, a: 1}
-    - Color_dce5cc796db748e687528717bc9c37d4: {r: 0.5333333, g: 0.765176, b: 1, a: 0}
-    - Color_dce5cc796db748e687528717bc9c37d4_1: {r: 1, g: 0.7306629, b: 0.25098038, a: 0}
-    - Color_dce5cc796db748e687528717bc9c37d4_2: {r: 0.76470596, g: 0.0627451, b: 0.0627451, a: 0}
+    - Color_a1820c702c334315b08860d90b891942: {r: 0.5943396, g: 0.5943396, b: 0.5943396,
+        a: 1}
+    - Color_dce5cc796db748e687528717bc9c37d4: {r: 0, g: 0, b: 0, a: 0}
+    - Color_dce5cc796db748e687528717bc9c37d4_1: {r: 1, g: 1, b: 1, a: 0}
+    - Color_dce5cc796db748e687528717bc9c37d4_2: {r: 0.76470596, g: 0.0627451, b: 0.0627451,
+        a: 0}
     - Vector2_9aa173ac35f5492880df67007192af93: {r: 1.94, g: 1.05, b: 0, a: 0}
     - _DoubleSidedConstants: {r: 1, g: 1, b: -1, a: 0}
     - _EmissionColor: {r: 1, g: 1, b: 1, a: 1}
   m_BuildTextureStacks: []
-  m_AllowLocking: 1
 --- !u!114 &2285712527592564860
 MonoBehaviour:
   m_ObjectHideFlags: 11
