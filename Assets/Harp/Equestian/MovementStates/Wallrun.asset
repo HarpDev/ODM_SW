@@ -37,8 +37,8 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  WallrunSpeed: 0.01
-  WallJumpSpeed: 13
+  WallrunSpeed: 0.7
+  WallJumpSpeed: 15
   WallJumpVerticalSpeed: 13
   RequiredVelocity: 50
   AttachSpeed: 1
@@ -49,4 +49,4 @@ MonoBehaviour:
   Layer:
     serializedVersion: 2
     m_Bits: 1
-  PositionOffset: {x: 0, y: 0, z: 0}
+  PositionOffset: {x: 0, y: 0, z: 2}

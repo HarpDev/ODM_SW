@@ -45,6 +45,10 @@ namespace Harp.Equestian
         [Header("Dynamic Distance Settings")]
         public float dynamicDistanceSmoothTime = 0.5f;
         public float dynamicDistanceDecayRate = 5f;
+        [Header("Collision Settings")]
+        public float collisionCheckRadius = 0.3f;
+        public float collisionPadding = 0.2f;
+        public float collisionSmoothTime = 0.01f;
 
         private float _currentDistance;
         float _currentDynamicDistance;
@@ -63,6 +67,8 @@ namespace Harp.Equestian
         float _dynamicFOVTarget;
         float _currentDynamicFOV;
         float _dynamicVel;
+        private Vector3 _positionVel;
+        private RaycastHit _lastHit;
 
         private void Awake()
         {
@@ -85,11 +91,12 @@ namespace Harp.Equestian
             _currentFOV = normalFOV;
             if (cam != null) cam.fieldOfView = normalFOV;
         }
+
         private void OnEnable()
         {
             _currSens = Sensitivity;
         }
-        private Vector3 _positionVel;
+
         private void LateUpdate()
         {
             PerformCameraTiltFunctionality();
@@ -106,6 +113,7 @@ namespace Harp.Equestian
                     break;
                 }
             }
+            
             Vector2 mouseInput = new Vector2(Input.GetAxisRaw("Mouse X"), Input.GetAxisRaw("Mouse Y"));
             // apply sensitivity
             float mx = mouseInput.x * _currSens;
@@ -113,37 +121,76 @@ namespace Harp.Equestian
             _yaw += mx;
             _pitch -= my;
             _pitch = Mathf.Clamp(_pitch, minPitch, maxPitch);
+            
             // compute target position/rotation for camera
             if (cameraPivot != null && playerCamera != null && tiltTarget != null)
             {
                 Vector3 pivotPos = cameraPivot.position + Vector3.up * height;
                 Quaternion baseRot = Quaternion.Euler(_pitch, _yaw, 0f);
                 Quaternion rot = baseRot * tiltTarget.localRotation;
-                Vector3 offset = Vector3.back * _currentDistance  + Vector3.right * _currentShoulderOffset;
+                Vector3 offset = Vector3.back * _currentDistance + Vector3.right * _currentShoulderOffset;
                 Vector3 desiredCamPos = pivotPos + rot * offset;
-                // collision check to prevent clipping
-                if (Physics.Linecast(pivotPos, desiredCamPos, out RaycastHit hit, ~0, QueryTriggerInteraction.Ignore))
+                
+                // FIRST: Check if the pivot height itself is clipping through ceiling
+                Vector3 basePivotPos = cameraPivot.position; // Position without height offset
+                if (Physics.Linecast(basePivotPos, pivotPos, out RaycastHit ceilingHit, ~0, QueryTriggerInteraction.Ignore))
                 {
-                    float adjustedDistance = Mathf.Max(0.5f, (hit.point - pivotPos).magnitude - 0.1f);
-                    desiredCamPos = pivotPos + rot * (Vector3.back * adjustedDistance + Vector3.right * _currentShoulderOffset);
+                    // Ceiling detected, lower the pivot
+                    pivotPos = ceilingHit.point - Vector3.up * collisionPadding;
+                    // Recalculate desired position with lowered pivot
+                    desiredCamPos = pivotPos + rot * offset;
                 }
-                playerCamera.transform.position = Vector3.SmoothDamp(
+                
+                // Enhanced collision detection with SphereCast
+                Vector3 directionToCamera = (desiredCamPos - pivotPos).normalized;
+                float desiredDistance = Vector3.Distance(pivotPos, desiredCamPos);
+                bool hitSomething = false;
+                
+                if (Physics.SphereCast(pivotPos, collisionCheckRadius, directionToCamera, out RaycastHit hit, 
+                    desiredDistance, ~0, QueryTriggerInteraction.Ignore))
+                {
+                    // Pull camera back from collision point with padding
+                    float safeDistance = Mathf.Max(0.5f, hit.distance - collisionPadding);
+                    desiredCamPos = pivotPos + directionToCamera * safeDistance;
+                    hitSomething = true;
+                    _lastHit = hit;
+                }
+                
+                // Use faster smoothing when colliding to prevent clipping
+                float currentSmoothTime = hitSomething ? collisionSmoothTime : smoothTimePos;
+                
+                // Smooth to desired position
+                Vector3 smoothedPos = Vector3.SmoothDamp(
                     playerCamera.transform.position,
                     desiredCamPos,
                     ref _positionVel,
-                    smoothTimePos
+                    currentSmoothTime
                 );
+                
+                // Final safety check: verify smoothed position doesn't clip
+                if (Physics.Linecast(pivotPos, smoothedPos, out RaycastHit finalHit, ~0, QueryTriggerInteraction.Ignore))
+                {
+                    // Push camera out along the hit normal
+                    smoothedPos = finalHit.point + finalHit.normal * collisionPadding;
+                    // Reset velocity to prevent smooth damp from fighting the correction
+                    _positionVel = Vector3.zero;
+                }
+                
+                playerCamera.transform.position = smoothedPos;
+                
                 playerCamera.transform.rotation = Quaternion.Slerp(
                     playerCamera.transform.rotation,
                     rot,
                     Time.deltaTime * (1f / Mathf.Max(0.001f, smoothTimeRot))
                 );
             }
+            
             if (cam != null)
             {
                 cam.fieldOfView = _currentFOV + _currentDynamicFOV;
             }
         }
+
         private void PerformCameraTiltFunctionality()
         {
             if (tiltTarget == null) return;
@@ -167,6 +214,7 @@ namespace Harp.Equestian
             float slerpT = 1f - Mathf.Exp(-Time.deltaTime / tiltSmoothTime);
             tiltTarget.localRotation = Quaternion.Slerp(tiltTarget.localRotation, targetTiltRot, slerpT);
         }
+
         private void PerformShoulderSwapFunctionality()
         {
             float targetShoulder = 0f;
@@ -193,6 +241,7 @@ namespace Harp.Equestian
 
             _currentShoulderOffset = Mathf.SmoothDamp(_currentShoulderOffset, targetShoulder, ref _shoulderVel, shoulderSmoothTime);
         }
+
         private void PerformFOVAdjustments()
         {
             float targetFOV = normalFOV;
@@ -204,7 +253,6 @@ namespace Harp.Equestian
 
         private void PerformDistanceAdjustments()
         {
-
             _currentDistance = _currentDynamicDistance + baseDistance;
             _currentDynamicDistance = Mathf.SmoothDamp(
                 _currentDynamicDistance,
@@ -220,9 +268,8 @@ namespace Harp.Equestian
             );
         }
 
-
-
         public static void RemoveOverride(OverrideLayer layer) => Overrides.Remove(layer);
+        
         public static OverrideLayer SetOverride(float value, int weight)
         {
             OverrideLayer layer = new(value, weight);
@@ -230,17 +277,18 @@ namespace Harp.Equestian
             Overrides.Sort((a, b) => a.Weight.CompareTo(b.Weight));
             return layer;
         }
+        
         public float Sensitivity => SettingsManager.Current.TrySetting("Sensitivity", out SingleSetting<float> sens) ? sens.Value : sensitivity;
         
         public void FovBurst(float amount)
         {
             if (cam.fieldOfView <= 110) _dynamicFOVTarget += amount;
         }
+        
         public void DistanceBurst(float amount)
         {
             _dynamicDistanceTarget += amount;
         }
-
 
         public class OverrideLayer
         {

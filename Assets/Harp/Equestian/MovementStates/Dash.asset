@@ -16,7 +16,7 @@ MonoBehaviour:
   BodyHeight: 2
   Gravity: 0
   ControlThreshold: 0
-  Speed: 70
+  Speed: 10
   GasSpeed: 2.67
   WalkSpeed: 0
   Drag: 0

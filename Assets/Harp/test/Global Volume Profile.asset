@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0b2db86121404754db890f4c8dfe81b2, type: 3}
   m_Name: Bloom
   m_EditorClassIdentifier: 
-  active: 0
+  active: 1
   skipIterations:
     m_OverrideState: 0
     m_Value: 1
@@ -109,7 +109,7 @@ MonoBehaviour:
     m_OverrideState: 0
     m_Value: 0
   sharpenIntensity:
-    m_OverrideState: 1
+    m_OverrideState: 0
     m_Value: 20.3
   sharpenDepthThreshold:
     m_OverrideState: 0
@@ -140,10 +140,10 @@ MonoBehaviour:
       serializedVersion: 2
       m_Bits: 0
   antialiasStrength:
-    m_OverrideState: 1
+    m_OverrideState: 0
     m_Value: 20
   antialiasDepthThreshold:
-    m_OverrideState: 1
+    m_OverrideState: 0
     m_Value: 0
   antialiasSpread:
     m_OverrideState: 0
@@ -167,7 +167,7 @@ MonoBehaviour:
     m_OverrideState: 0
     m_Value: 1
   saturate:
-    m_OverrideState: 1
+    m_OverrideState: 0
     m_Value: 3
   brightness:
     m_OverrideState: 0
@@ -185,14 +185,14 @@ MonoBehaviour:
     m_OverrideState: 0
     m_Value: {r: 1, g: 1, b: 1, a: 0}
   colorTempBlend:
-    m_OverrideState: 1
+    m_OverrideState: 0
     m_Value: 1
   colorTemp:
-    m_OverrideState: 1
-    m_Value: 40000
+    m_OverrideState: 0
+    m_Value: 4023
   lut:
     m_OverrideState: 0
-    m_Value: 0
+    m_Value: 1
   lutIntensity:
     m_OverrideState: 0
     m_Value: 0
@@ -202,7 +202,7 @@ MonoBehaviour:
     dimension: 1
   bloomIntensity:
     m_OverrideState: 1
-    m_Value: 0.57
+    m_Value: 0.36
   bloomThreshold:
     m_OverrideState: 0
     m_Value: 0.75
@@ -699,10 +699,10 @@ MonoBehaviour:
     m_OverrideState: 0
     m_Value: 1
   outlineColor:
-    m_OverrideState: 1
+    m_OverrideState: 0
     m_Value: {r: 0, g: 0, b: 0, a: 0.8}
   outlineTechnique:
-    m_OverrideState: 1
+    m_OverrideState: 0
     m_Value: 0
   outlineMinSeparation:
     m_OverrideState: 0
@@ -711,13 +711,13 @@ MonoBehaviour:
     m_OverrideState: 0
     m_Value: 0
   outlineThreshold:
-    m_OverrideState: 1
+    m_OverrideState: 0
     m_Value: 0.5
   outlineMinDepthThreshold:
-    m_OverrideState: 1
+    m_OverrideState: 0
     m_Value: 0
   outlineSaturationDiffThreshold:
-    m_OverrideState: 1
+    m_OverrideState: 0
     m_Value: 0.063
   outlineCustomize:
     m_OverrideState: 0
@@ -755,7 +755,7 @@ MonoBehaviour:
     m_OverrideState: 0
     m_Value: 1
   nightVisionColor:
-    m_OverrideState: 1
+    m_OverrideState: 0
     m_Value: {r: 1, g: 1, b: 1, a: 0.5}
   nightVisionDepth:
     m_OverrideState: 0
@@ -811,7 +811,7 @@ MonoBehaviour:
     m_Value: 1
   filmGrainIntensity:
     m_OverrideState: 0
-    m_Value: 0
+    m_Value: 0.16
   filmGrainResolution:
     m_OverrideState: 0
     m_Value: 0.85
@@ -886,5 +886,31 @@ MonoBehaviour:
   m_Name: Global Volume Profile
   m_EditorClassIdentifier: 
   components:
+  - {fileID: 2461370113306152408}
   - {fileID: -8726729476762815011}
   - {fileID: -134790405644549748}
+--- !u!114 &2461370113306152408
+MonoBehaviour:
+  m_ObjectHideFlags: 3
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ccf1aba9553839d41ae37dd52e9ebcce, type: 3}
+  m_Name: MotionBlur
+  m_EditorClassIdentifier: 
+  active: 0
+  mode:
+    m_OverrideState: 0
+    m_Value: 0
+  quality:
+    m_OverrideState: 1
+    m_Value: 2
+  intensity:
+    m_OverrideState: 1
+    m_Value: 0.122
+  clamp:
+    m_OverrideState: 1
+    m_Value: 0.2

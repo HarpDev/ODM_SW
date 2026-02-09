@@ -6,6 +6,7 @@ namespace Player.Movement
     [CreateAssetMenu(menuName = "Movement State/Dash")]
     public class PlayerMovementDash : PlayerMovementBasic
     {
+        private static float dashSpeed;
         public const int DashLayer = 21;
         public const int PlayerLayer = 3;
         private PlayerMotor motor;
@@ -18,6 +19,7 @@ namespace Player.Movement
         Vector3 direction;
         public override void StateStarted(PlayerMotor parent)
         {
+            dashSpeed =  Speed + parent.currentSpeed;
             motor = parent.GetComponent<PlayerMotor>();
             timer = Duration;
             parent.Collider.gameObject.layer = DashLayer;
@@ -51,7 +53,8 @@ namespace Player.Movement
                 parent.CurrentState = ExitState;
                 return;
             }
-            parent.Rigidbody.velocity = direction * Speed;
+            
+            parent.Rigidbody.velocity = direction * dashSpeed;
             if (CurrentJumpBuffer > 0f)
             {
                 TryJump(parent);
