@@ -21,7 +21,7 @@ public class FootstepManager : MonoBehaviour
     
     private void Start()
     {
-        // If no audio source is assigned, create one
+        
         if (audioSource == null)
         {
             audioSource = gameObject.AddComponent<AudioSource>();
@@ -30,9 +30,9 @@ public class FootstepManager : MonoBehaviour
         }
     }
     
-    /// <summary>
+    
     /// Play a random footstep sound. Call this from animation events.
-    /// </summary>
+  
     public void PlayFootstep()
     {
         if (footstepSounds == null || footstepSounds.Length == 0)
@@ -50,10 +50,10 @@ public class FootstepManager : MonoBehaviour
             return;
         }
         
-        // Apply random pitch variation
+       
         audioSource.pitch = 1f + Random.Range(-pitchVariation, pitchVariation);
         
-        // Play the sound
+     
         audioSource.PlayOneShot(clip, volume);
     }
     
