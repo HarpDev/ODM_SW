@@ -1,5 +1,6 @@
 {
     "name": "QFSW.QC.ScanRules",
+    "rootNamespace": "",
     "references": [
         "GUID:fb24642277b1db2449da7ac148ce939d"
     ],
