@@ -80,10 +80,19 @@ namespace Harp.ODMLogic
         public float maxAngle = 45f;
         public float currentSeparation = 0f;
 
-        [Header("Logic Dash")]
-        public float dashTimer = 1f;
+        [Header("Logic Dash - EN System")]
+        public float enCapacity = 1000f; // Total energy pool
+        public float currentEN = 1000f; // Current energy
+        public float enRechargeRate = 300f; // EN per second
+        public float enRechargeDelay = 0.5f; // Delay after hitting 0 EN
+        private float _enRechargeTimer = 0f;
+        
+        public float dashENCost = 150f; // EN cost per dash
+        public float boostENCost = 200f; // EN cost per double-tap boost
+        public float dashCooldown = 0.3f;
+        private float _dashTimer = 0f;
+        
         public float gasDashForce = 15f;
-        public float dashCooldown = 1f;
         public float directionalBoostCooldown = 0.5f;
 
         [Header("Boost Logic")]
@@ -139,7 +148,7 @@ namespace Harp.ODMLogic
       
         [Header("Animation")]
         [SerializeField] private Animator animator;
-  private bool _isBoosting;
+        private bool _isBoosting;
         private bool _wasBoosting;
 
         
@@ -232,17 +241,11 @@ namespace Harp.ODMLogic
 
         private void UpdateDashUI()
         {
-            if (dashCooldownImage != null && currentGasAmount > 0f)
+            if (dashCooldownImage != null)
             {
-                if (dashTimer > 0f)
-                {
-                    dashCooldownImage.fillAmount = dashTimer / dashCooldown;
-                    dashCooldownImage.gameObject.SetActive(true);
-                }
-                else
-                {
-                    dashCooldownImage.gameObject.SetActive(false);
-                }
+                // Show EN gauge
+                dashCooldownImage.fillAmount = currentEN / enCapacity;
+                dashCooldownImage.gameObject.SetActive(true);
             }
         }
 
@@ -320,9 +323,21 @@ namespace Harp.ODMLogic
 
         void UpdateDashTimers()
         {
-            if (dashTimer > 0f)
+            // Dash cooldown
+            if (_dashTimer > 0f)
             {
-                dashTimer -= Time.deltaTime;
+                _dashTimer -= Time.deltaTime;
+            }
+
+            // EN recharge delay (when you hit 0)
+            if (_enRechargeTimer > 0f)
+            {
+                _enRechargeTimer -= Time.deltaTime;
+            }
+            // Recharge EN when delay is over
+            else if (currentEN < enCapacity)
+            {
+                currentEN = Mathf.Min(currentEN + enRechargeRate * Time.deltaTime, enCapacity);
             }
         }
 
@@ -555,13 +570,13 @@ namespace Harp.ODMLogic
                 StopHook(1);
             }
 
-            // Dashing
-            if (!isOrbiting && !isReeling && !player.IsGrounded && Input.GetKeyDown(KeyCode.LeftShift))
+            // Dashing - Now uses EN system
+            if (!isOrbiting && !isReeling && Input.GetKeyDown(KeyCode.LeftShift))
             {
-                if (dashTimer <= 0f)
+                if (_dashTimer <= 0f && currentEN >= dashENCost)
                 {
                     PerformAirDash(player.GetWishDir());
-                    dashTimer = directionalBoostCooldown;
+                    _dashTimer = dashCooldown;
                 }
             }
         }
@@ -663,8 +678,6 @@ namespace Harp.ODMLogic
 
         void PerformAirDash(Vector3 wishDir)
         {
-            if (currentGasAmount < 0) return;
-
             Vector3 dashDir;
             float strength;
 
@@ -694,7 +707,15 @@ namespace Harp.ODMLogic
 
             player.Rigidbody.AddForce(dashDir * strength, ForceMode.VelocityChange);
 
-            currentGasAmount -= gasDashForce / 100f;
+            // Consume EN instead of gas
+            currentEN -= dashENCost;
+            
+            // Check if we hit 0 EN - trigger recharge delay
+            if (currentEN <= 0f)
+            {
+                currentEN = 0f;
+                _enRechargeTimer = enRechargeDelay;
+            }
 
             gasDashParticles.Emit(120);
             gasDashParticles.Play();
@@ -745,7 +766,7 @@ namespace Harp.ODMLogic
         {
             if (_isBoosting && !_wasBoosting)
             {
-                if (currentGasAmount <= 0)
+                if (currentEN < boostENCost)
                 {
                     _isBoosting = false;
                     return;
@@ -781,13 +802,21 @@ namespace Harp.ODMLogic
                     }
 
                     player.Rigidbody.AddForce(boostDir * boostImpulseForce, ForceMode.Impulse);
-                    currentGasAmount -= gasDashForce / 100f;
+                    currentEN -= boostENCost;
+                    
+                    // Check if we hit 0 EN
+                    if (currentEN <= 0f)
+                    {
+                        currentEN = 0f;
+                        _enRechargeTimer = enRechargeDelay;
+                    }
+                    
                     gasDashParticles.Emit(120);
                     gasDashParticles.Play();
                 }
                 else
                 {
-                    if (dashTimer > 0f)
+                    if (_dashTimer > 0f)
                     {
                         return; // Cooldown active, skip the dash
                     }
@@ -798,11 +827,18 @@ namespace Harp.ODMLogic
                     boostDir = playerCameraTransform.forward.normalized;
                     UseGas(100);
                     player.Rigidbody.AddForce(boostDir * boostImpulseForce, ForceMode.Impulse);
-                    currentGasAmount -= gasDashForce / 100f;
+                    currentEN -= boostENCost;
+                    
+                    if (currentEN <= 0f)
+                    {
+                        currentEN = 0f;
+                        _enRechargeTimer = enRechargeDelay;
+                    }
+                    
                     gasDashParticles.Emit(120);
                     gasDashParticles.Play();
 
-                    dashTimer = dashCooldown; // Start cooldown
+                    _dashTimer = dashCooldown; // Start cooldown
                 }
 
                 _wasBoosting = true;

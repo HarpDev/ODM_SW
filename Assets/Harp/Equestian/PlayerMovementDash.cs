@@ -19,7 +19,7 @@ namespace Player.Movement
         Vector3 direction;
         public override void StateStarted(PlayerMotor parent)
         {
-            dashSpeed =  Speed + parent.currentSpeed;
+            dashSpeed =  Speed + (parent.currentSpeed / 2);
             motor = parent.GetComponent<PlayerMotor>();
             timer = Duration;
             parent.Collider.gameObject.layer = DashLayer;

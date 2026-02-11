@@ -12,11 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 024919a98b937b942a4681c9c6627e79, type: 3}
   m_Name: Dash
   m_EditorClassIdentifier: 
-  CameraHeight: 1.02
+  cameraHeight: 1.02
   BodyHeight: 2
   Gravity: 0
   ControlThreshold: 0
-  Speed: 21.9
+  Speed: 50
   GasSpeed: 2.67
   WalkSpeed: 0
   Drag: 0
