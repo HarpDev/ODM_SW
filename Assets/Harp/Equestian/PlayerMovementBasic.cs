@@ -1,11 +1,12 @@
 using UnityEditor;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace Player.Movement
 {
     public abstract class PlayerMovementBasic : PlayerMovementStateBase
     {
-        public float CameraHeight = 1.8f;
+        [FormerlySerializedAs("CameraHeight")] public float cameraHeight = 1.8f;
         public float BodyHeight = 2f;
         public float Gravity = -30f;
         public float ControlThreshold = 10f;
@@ -25,7 +26,7 @@ namespace Player.Movement
             CurrentJumpBuffer = 0f;
             prevDrag = parent.Rigidbody.drag;
             parent.Rigidbody.drag = Drag;
-            parent.TargetCameraHeight = CameraHeight;
+            parent.TargetCameraHeight = cameraHeight;
             parent.Height = BodyHeight;
         }
 

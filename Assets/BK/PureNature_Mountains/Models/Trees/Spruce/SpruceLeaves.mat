@@ -122,15 +122,29 @@ Material:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
+    - unity_Lightmaps:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - unity_LightmapsInd:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - unity_ShadowMasks:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
+    - _AlphaClipThreshold: 0.2
+    - _AlphaCutoff: 0.5
     - _BaseWind: 2
     - _BaseWindChannel: 0
     - _Bias: 1
     - _BranchPhase: 0.35
     - _BranchPhase1: 1.05
     - _BumpScale: 1
-    - _ColorVariationPower: 1
+    - _ColorVariationPower: 0
     - _Cutoff: 0.3
     - _DetailNormalMapScale: 1
     - _Dither: 3
@@ -138,6 +152,7 @@ Material:
     - _DstBlend: 0
     - _EdgeFlutter: 4
     - _EdgeFlutter1: 1.93
+    - _EnvironmentReflections: 1
     - _Float0: 1
     - _Float1: 1
     - _Frequency: 10
@@ -173,6 +188,9 @@ Material:
     - _Power: 0.1
     - _PrimaryFactor: 1.01
     - _PrimaryFactor1: 1.02
+    - _QueueControl: 0
+    - _QueueOffset: 0
+    - _ReceiveShadows: 1
     - _Scale: -1
     - _ScatteringPower: 0
     - _ScatteringScale: 0.15
@@ -188,15 +206,17 @@ Material:
     - _Trans: 1
     - _TransAmbient: 1
     - _TransDirect: 1
+    - _TransNormal: 0
     - _TransNormalDistortion: 0.1
     - _TransScattering: 2
-    - _TransShadow: 0.5
+    - _TransShadow: 0.455
+    - _TransStrength: 0.7
     - _Translucency: 1
     - _TrunkWindAmplitude: 0.09
     - _TrunkWindPower: 1
     - _UVSec: 0
     - _UseDither: 1
-    - _VertexOcclusionPower: 0.111
+    - _VertexOcclusionPower: 0.25
     - _WindBurstsPower: 10
     - _WindBurstsScale: 1
     - _WindBurstsSpeed: 50
@@ -214,10 +234,10 @@ Material:
     m_Colors:
     - _Color: {r: 1, g: 1, b: 1, a: 1}
     - _Color0: {r: 1, g: 1, b: 1, a: 0}
-    - _ColorVariation: {r: 0.092796944, g: 0.3207547, b: 0.19978106, a: 1}
+    - _ColorVariation: {r: 0.12990743, g: 0.41509432, b: 0, a: 1}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
     - _GradientColor: {r: 0.3934599, g: 0.5188679, b: 0.1696926, a: 1}
-    - _MainColor: {r: 0.14685065, g: 0.31132078, b: 0.113563545, a: 1}
+    - _MainColor: {r: 0, g: 0.3529412, b: 0.1360594, a: 1}
     - _ScatteringColor: {r: 0.56218994, g: 1, b: 0, a: 0}
     - _SpecularColor: {r: 0.39215687, g: 0.39215687, b: 0.39215687, a: 1}
     - _Tiling: {r: 4, g: 4, b: 0, a: 0}

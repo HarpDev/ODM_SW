@@ -64,7 +64,7 @@ namespace Player.Movement
 
             bool isOnSlideBooster = IsOnSlideBooster(parent);
 
-            if ((!Input.GetKey(KeyCode.LeftControl) || !parent.IsGrounded) && !isOnSlideBooster)
+            if ((!Input.GetKey(KeyCode.LeftControl) || !parent.IsGrounded) && !isOnSlideBooster || Input.GetKey(KeyCode.LeftShift))
             {
                 parent.CurrentState = ExitState;
                 ExitState.ReceiveData(JumpSpeed);

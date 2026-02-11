@@ -52,7 +52,7 @@ namespace Player.Movement
 
             if (Input.GetKey(KeyCode.LeftControl))
             {
-                if (Input.GetKeyUp(KeyCode.LeftShift))
+                if (Input.GetKey(KeyCode.LeftShift))
                 {
                     
                     return;

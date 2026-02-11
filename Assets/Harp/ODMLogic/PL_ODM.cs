@@ -84,6 +84,7 @@ namespace Harp.ODMLogic
         public float dashTimer = 1f;
         public float gasDashForce = 15f;
         public float dashCooldown = 1f;
+        public float directionalBoostCooldown = 0.5f;
 
         [Header("Boost Logic")]
         [SerializeField] private float doubleTapThreshold = 0.3f;
@@ -560,7 +561,7 @@ namespace Harp.ODMLogic
                 if (dashTimer <= 0f)
                 {
                     PerformAirDash(player.GetWishDir());
-                    dashTimer = dashCooldown;
+                    dashTimer = directionalBoostCooldown;
                 }
             }
         }

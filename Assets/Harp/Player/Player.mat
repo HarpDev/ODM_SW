@@ -42,5 +42,6 @@ Material:
     - _AlphaClip: 0
     - _AlphaToMask: 0
     - _Cull: 2
-    m_Colors: []
+    m_Colors:
+    - _Color: {r: 1, g: 1, b: 1, a: 1}
   m_BuildTextureStacks: []
