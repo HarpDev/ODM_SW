@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 76cc29b0ec0ec49459e23890b1b38cca, type: 3}
   m_Name: Slide
   m_EditorClassIdentifier: 
-  CameraHeight: 0.32
+  cameraHeight: 0.32
   BodyHeight: 0.8
   Gravity: -50
   ControlThreshold: 5

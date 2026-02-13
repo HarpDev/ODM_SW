@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0b2db86121404754db890f4c8dfe81b2, type: 3}
   m_Name: Bloom
   m_EditorClassIdentifier: 
-  active: 1
+  active: 0
   skipIterations:
     m_OverrideState: 0
     m_Value: 1
@@ -109,8 +109,8 @@ MonoBehaviour:
     m_OverrideState: 0
     m_Value: 0
   sharpenIntensity:
-    m_OverrideState: 0
-    m_Value: 20.3
+    m_OverrideState: 1
+    m_Value: 0
   sharpenDepthThreshold:
     m_OverrideState: 0
     m_Value: 0.035
@@ -140,8 +140,8 @@ MonoBehaviour:
       serializedVersion: 2
       m_Bits: 0
   antialiasStrength:
-    m_OverrideState: 0
-    m_Value: 20
+    m_OverrideState: 1
+    m_Value: 0.7
   antialiasDepthThreshold:
     m_OverrideState: 0
     m_Value: 0
@@ -202,7 +202,7 @@ MonoBehaviour:
     dimension: 1
   bloomIntensity:
     m_OverrideState: 1
-    m_Value: 0.36
+    m_Value: 0.2
   bloomThreshold:
     m_OverrideState: 0
     m_Value: 0.75
@@ -463,7 +463,7 @@ MonoBehaviour:
     m_Value: 0.01
   lensDirtIntensity:
     m_OverrideState: 0
-    m_Value: 0
+    m_Value: 0.64
   lensDirtThreshold:
     m_OverrideState: 0
     m_Value: 0.5
@@ -889,6 +889,7 @@ MonoBehaviour:
   - {fileID: 2461370113306152408}
   - {fileID: -8726729476762815011}
   - {fileID: -134790405644549748}
+  - {fileID: 9197870462397647742}
 --- !u!114 &2461370113306152408
 MonoBehaviour:
   m_ObjectHideFlags: 3
@@ -914,3 +915,37 @@ MonoBehaviour:
   clamp:
     m_OverrideState: 1
     m_Value: 0.2
+--- !u!114 &9197870462397647742
+MonoBehaviour:
+  m_ObjectHideFlags: 3
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 558a8e2b6826cf840aae193990ba9f2e, type: 3}
+  m_Name: ShadowsMidtonesHighlights
+  m_EditorClassIdentifier: 
+  active: 1
+  shadows:
+    m_OverrideState: 1
+    m_Value: {x: 1, y: 1, z: 1, w: -1}
+  midtones:
+    m_OverrideState: 0
+    m_Value: {x: 1, y: 1, z: 1, w: 0}
+  highlights:
+    m_OverrideState: 0
+    m_Value: {x: 1, y: 1, z: 1, w: 0}
+  shadowsStart:
+    m_OverrideState: 0
+    m_Value: 0
+  shadowsEnd:
+    m_OverrideState: 0
+    m_Value: 0.3
+  highlightsStart:
+    m_OverrideState: 0
+    m_Value: 0.55
+  highlightsEnd:
+    m_OverrideState: 0
+    m_Value: 1

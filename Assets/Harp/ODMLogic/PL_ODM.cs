@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Globalization;
@@ -6,6 +7,7 @@ using Player.Movement;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Serialization;
+using Random = UnityEngine.Random;
 
 namespace Harp.ODMLogic
 {
@@ -98,6 +100,7 @@ namespace Harp.ODMLogic
         [Header("Boost Logic")]
         [SerializeField] private float doubleTapThreshold = 0.3f;
         [SerializeField] private float boostImpulseForce = 10f;
+        public ParticleSystem[] boostEffects; 
 
         [Header("Logic Hook Fire")]
         public List<bool> hooksReady = new List<bool>(new[] { true, true });
@@ -334,10 +337,13 @@ namespace Harp.ODMLogic
             {
                 _enRechargeTimer -= Time.deltaTime;
             }
-            // Recharge EN when delay is over
+            // Recharge EN when delay is over. 2X speed recharge if grounded
             else if (currentEN < enCapacity)
             {
-                currentEN = Mathf.Min(currentEN + enRechargeRate * Time.deltaTime, enCapacity);
+                if (player.IsGrounded) currentEN = Mathf.Min(currentEN + enRechargeRate * 2 * Time.deltaTime, enCapacity);
+                else currentEN = Mathf.Min(currentEN + enRechargeRate * Time.deltaTime, enCapacity);
+                
+                
             }
         }
 
@@ -764,6 +770,11 @@ namespace Harp.ODMLogic
 
         private void HandleBoostImpulse()
         {
+            foreach (var particleSystem in boostEffects)
+            {
+                particleSystem.Play();
+                
+            }
             if (_isBoosting && !_wasBoosting)
             {
                 if (currentEN < boostENCost)
