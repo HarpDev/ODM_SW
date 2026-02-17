@@ -21,7 +21,7 @@ namespace AssetStoreTools.Validator.TestMethods
 
         public TestResult Run()
         {
-            // How many peaks above threshold are required for Audio Clips to be considered clipping
+            // How many peaks above threshold are required for audioSources Clips to be considered clipping
             const int TOLERANCE = 2;
             // Min. amount of consecutive samples above threshold required for peak detection
             const int PEAK_STEPS = 1;

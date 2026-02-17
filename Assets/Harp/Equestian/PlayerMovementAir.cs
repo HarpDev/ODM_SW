@@ -49,7 +49,7 @@ namespace Player.Movement
 
             
 
-            if (parent.RecentJumpTimer.Ended)
+            if (parent.recentJumpTimer.Ended)
                 ApplyCoyote();
 
             base.StateStarted(parent);
@@ -184,7 +184,7 @@ namespace Player.Movement
 
             Dictionary<Collider, RaycastHit> blacklist = new();
             for (int i = 0; i < WallKickRaycastIterations; i++)
-                if (Physics.Raycast(parent.transform.position + Vector3.up * 1.4f, GetWallKickDirectionRaycast(parent, 360f / WallKickRaycastIterations * i), out RaycastHit hit, WallKickDistance, parent.GroundLayers, QueryTriggerInteraction.Ignore) && !blacklist.ContainsKey(hit.collider))
+                if (Physics.Raycast(parent.transform.position + Vector3.up * 1.4f, GetWallKickDirectionRaycast(parent, 360f / WallKickRaycastIterations * i), out RaycastHit hit, WallKickDistance, parent.groundLayers, QueryTriggerInteraction.Ignore) && !blacklist.ContainsKey(hit.collider))
                     blacklist.Add(hit.collider, hit);
                         
             if (blacklist.Count == 0)

@@ -1,9 +1,7 @@
 using SwiftKraft.Utils;
-using System;
 using System.Linq;
 using UnityEngine;
 using System.Collections;
-using System.Collections.Generic;
 using Harp.ODMLogic;
 using UnityEngine.Serialization;
 
@@ -19,25 +17,25 @@ namespace Player.Movement
 
         #region Serialized Fields
         [FormerlySerializedAs("Camera")] [Header("Third Person Orientation")]
-        public Transform camera;
-        public float GroundRotationSpeed = 12f;
-        public float AirborneRotationSpeed = 6f;
+        public new Transform camera;
+        [FormerlySerializedAs("GroundRotationSpeed")] public float groundRotationSpeed = 12f;
+        [FormerlySerializedAs("AirborneRotationSpeed")] public float airborneRotationSpeed = 6f;
 
-        [SerializeField] private PL_ODM ODM;
+        [FormerlySerializedAs("ODM")] [SerializeField] private PL_ODM odm;
         #endregion
 
         #region Public Fields
-        public PlayerMovementStateBase DefaultState;
-        public PlayerMovementStateBase SlideState;
-        public Timer RecentJumpTimer;
-        public float OriginalCameraHeight = 1.7f;
-        public float CameraSmoothTime = 0.1f;
-        public Transform CameraRoot;
-        public Transform GroundPoint;
-        public float GroundRadius;
-        public LayerMask GroundLayers;
-        public AudioSource[] Audio;
-        public ParticleSystem[] Particles;
+        [FormerlySerializedAs("DefaultState")] public PlayerMovementStateBase defaultState;
+        [FormerlySerializedAs("SlideState")] public PlayerMovementStateBase slideState;
+        [FormerlySerializedAs("RecentJumpTimer")] public Timer recentJumpTimer;
+        [FormerlySerializedAs("OriginalCameraHeight")] public float originalCameraHeight = 1.7f;
+        [FormerlySerializedAs("CameraSmoothTime")] public float cameraSmoothTime = 0.1f;
+        [FormerlySerializedAs("CameraRoot")] public Transform cameraRoot;
+        [FormerlySerializedAs("GroundPoint")] public Transform groundPoint;
+        [FormerlySerializedAs("GroundRadius")] public float groundRadius;
+        [FormerlySerializedAs("GroundLayers")] public LayerMask groundLayers;
+        [FormerlySerializedAs("Audio")] public AudioSource[] audioSources;
+        [FormerlySerializedAs("Particles")] public ParticleSystem[] particles;
         public float currentSpeed;
         
         [Header("Animation")]
@@ -46,14 +44,20 @@ namespace Player.Movement
         #endregion
 
         #region Hidden Fields
-        [HideInInspector] public float TargetCameraHeight;
+        [FormerlySerializedAs("TargetCameraHeight")] [HideInInspector] public float targetCameraHeight;
         [HideInInspector] public float slideBoostTimer;
         #endregion
 
         #region Private Fields
-        private PlayerMovementStateBase state;
-        private bool isGrounded;
-        private float cameraVel;
+        private PlayerMovementStateBase _state;
+        private bool _isGrounded;
+        private float _cameraVel;
+
+        public PlayerMotor(float targetCameraHeight)
+        {
+            this.targetCameraHeight = targetCameraHeight;
+        }
+
         #endregion
 
         #region Properties
@@ -61,21 +65,21 @@ namespace Player.Movement
         {
             get
             {
-                if (state == null)
+                if (_state == null)
                 {
-                    state = DefaultState;
-                    state.StateStarted(this);
+                    _state = defaultState;
+                    _state.StateStarted(this);
                 }
-                return state;
+                return _state;
             }
             set
             {
-                if (state == value || (value == null && state == DefaultState))
+                if (_state == value || (value == null && _state == defaultState))
                     return;
-                if (state != null)
-                    state.StateEnded(this);
-                state = value != null ? value : DefaultState;
-                state.StateStarted(this);
+                if (_state != null)
+                    _state.StateEnded(this);
+                _state = value != null ? value : defaultState;
+                _state.StateStarted(this);
             }
         }
 
@@ -84,13 +88,13 @@ namespace Player.Movement
 
         public bool IsGrounded
         {
-            get => isGrounded;
+            get => _isGrounded;
             protected set
             {
-                if (isGrounded == value)
+                if (_isGrounded == value)
                     return;
-                bool prev = isGrounded;
-                isGrounded = value;
+                bool prev = _isGrounded;
+                _isGrounded = value;
                 CurrentState.GroundedChanged(this, value, prev);
                 OnGroundedChanged?.Invoke(value, prev);
             }
@@ -108,15 +112,15 @@ namespace Player.Movement
 
         public float CameraHeight
         {
-            get => CameraRoot.localPosition.y;
-            protected set => CameraRoot.localPosition = new(0f, value, 0f);
+            get => cameraRoot.localPosition.y;
+            protected set => cameraRoot.localPosition = new(0f, value, 0f);
         }
 
         public float ViableHeight
         {
             get
             {
-                if (Physics.Raycast(GroundPoint.position + (Vector3.up * 0.01f), Vector3.up, out RaycastHit hit, Mathf.Infinity, GroundLayers, QueryTriggerInteraction.Ignore))
+                if (Physics.Raycast(groundPoint.position + (Vector3.up * 0.01f), Vector3.up, out RaycastHit hit, Mathf.Infinity, groundLayers, QueryTriggerInteraction.Ignore))
                     return hit.distance;
                 return Mathf.Infinity;
             }
@@ -130,12 +134,12 @@ namespace Player.Movement
         {
             Rigidbody = GetComponent<Rigidbody>();
             Collider = GetComponent<CapsuleCollider>();
-            TargetCameraHeight = OriginalCameraHeight;
-            if (DefaultState == null)
+            targetCameraHeight = originalCameraHeight;
+            if (defaultState == null)
                 enabled = false;
             if (camera == null)
             {
-                camera = CameraRoot.GetComponentInChildren<Camera>()?.transform;
+                camera = cameraRoot.GetComponentInChildren<Camera>()?.transform;
                 if (camera == null)
                     Debug.LogWarning("PlayerMotor: No Camera assigned or found! Movement will be broken.");
             }
@@ -148,14 +152,14 @@ namespace Player.Movement
 
         private void Update()
         {
-            CameraHeight = Mathf.SmoothDamp(CameraHeight, TargetCameraHeight, ref cameraVel, CameraSmoothTime);
+            CameraHeight = Mathf.SmoothDamp(CameraHeight, targetCameraHeight, ref _cameraVel, cameraSmoothTime);
             CurrentState.InputUpdate(this);
         }
 
         private void FixedUpdate()
         {
-            RecentJumpTimer.Tick(Time.fixedDeltaTime);
-            Collider[] cols = Physics.OverlapSphere(GroundPoint.position, GroundRadius, GroundLayers)
+            recentJumpTimer.Tick(Time.fixedDeltaTime);
+            Collider[] cols = Physics.OverlapSphere(groundPoint.position, groundRadius, groundLayers)
                 .OrderBy(c => (c.transform.position - transform.position).sqrMagnitude).ToArray();
             IsGrounded = cols.Length > 0;
             GroundObject = IsGrounded ? cols[0].gameObject : null;
@@ -164,11 +168,11 @@ namespace Player.Movement
             else if (slideBoostTimer < 0f)
                 slideBoostTimer = 0f;
             CurrentState.TickUpdate(this);
-            if (!ODM.isReeling)
+            if (!odm.isReeling)
                 HandleCameraFacingRotation();
-            if (SlideState != null)
+            if (slideState != null)
             {
-                PlayerMovementStateBase desiredState = (IsGrounded && ODM.isReeling) ? SlideState : CurrentState;
+                PlayerMovementStateBase desiredState = (IsGrounded && odm.isReeling) ? slideState : CurrentState;
                 CurrentState = desiredState;
             }
         }
@@ -182,6 +186,8 @@ namespace Player.Movement
                 currentSpeed = Mathf.Ceil(Rigidbody.velocity.magnitude);
                 yield return new WaitForSeconds(0.1f);
             }
+
+            
         }
         #endregion
 
@@ -208,7 +214,7 @@ namespace Player.Movement
 
         public Vector3 GetGroundNormal()
         {
-            if (IsGrounded && Physics.Raycast(GroundPoint.position + Vector3.up, Vector3.down, out RaycastHit hit, 2f, GroundLayers, QueryTriggerInteraction.Ignore))
+            if (IsGrounded && Physics.Raycast(groundPoint.position + Vector3.up, Vector3.down, out RaycastHit hit, 2f, groundLayers, QueryTriggerInteraction.Ignore))
                 return hit.normal;
             return Vector3.zero;
            
@@ -218,7 +224,7 @@ namespace Player.Movement
 
         public void CallJumpAnimation()
         {
-            animator.SetTrigger("Jump");
+            animator.SetTrigger(AnimJump);
         }
 
         public void PlayMotorSound(int index)
@@ -229,9 +235,9 @@ namespace Player.Movement
 
         public AudioSource GetSound(int index)
         {
-            if (index >= Audio.Length || index < 0)
+            if (index >= audioSources.Length || index < 0)
                 return null;
-            return Audio[index];
+            return audioSources[index];
         }
 
         public bool TryGetSound(int index, out AudioSource au)
@@ -248,9 +254,9 @@ namespace Player.Movement
 
         public ParticleSystem GetParticle(int index)
         {
-            if (index >= Particles.Length || index < 0)
+            if (index >= particles.Length || index < 0)
                 return null;
-            return Particles[index];
+            return particles[index];
         }
 
         public bool TryGetParticle(int index, out ParticleSystem au)
@@ -272,7 +278,7 @@ namespace Player.Movement
         #region Private Methods
         private void HandleCameraFacingRotation()
         {
-            if (camera == null || ODM.isReeling) return;
+            if (camera == null || odm.isReeling) return;
             Vector3 wishDir = GetWishDir();
             bool hasInput = wishDir.magnitude >= 0.1f;
             // For grounded, skip if no input; for air, always rotate
@@ -282,7 +288,7 @@ namespace Player.Movement
             if (camForward.sqrMagnitude < 0.0001f) return;
             camForward.Normalize();
             Quaternion targetRotation = Quaternion.LookRotation(camForward, Vector3.up);
-            float rotationSpeed = IsGrounded ? GroundRotationSpeed : AirborneRotationSpeed;
+            float rotationSpeed = IsGrounded ? groundRotationSpeed : airborneRotationSpeed;
             float rotationStep = rotationSpeed * Time.fixedDeltaTime;
             Rigidbody.MoveRotation(Quaternion.Slerp(Rigidbody.rotation, targetRotation, rotationStep));
         }

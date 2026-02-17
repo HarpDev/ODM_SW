@@ -56,7 +56,7 @@ namespace Harp.ODMLogic
         public Volume strainPostProcess;
         public Volume deadPostProcessing;
 
-        [Header("Audio")]
+        [Header("audioSources")]
         public AudioSource windSpeedAudioSource;
         public AudioSource ropeCreakAudioSource;
         public AudioSource impactAudioSource;

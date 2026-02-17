@@ -6022,7 +6022,7 @@ AudioSource:
     m_Curve:
     - serializedVersion: 3
       time: 0
-      value: 0
+      value: 0.278
       inSlope: 0
       outSlope: 0
       tangentMode: 0
@@ -6157,6 +6157,8 @@ GameObject:
   - component: {fileID: 8590603485866936027}
   - component: {fileID: 5179557424509245095}
   - component: {fileID: 3837621495647474183}
+  - component: {fileID: 3520776827590474639}
+  - component: {fileID: 471301836889610460}
   m_Layer: 3
   m_Name: HookSlotLeft
   m_TagString: Untagged
@@ -6173,7 +6175,7 @@ Transform:
   m_GameObject: {fileID: 1112958788274509090}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.00273, y: -0.00295, z: -0.00246}
+  m_LocalPosition: {x: 0.00293, y: -0.00295, z: -0.00246}
   m_LocalScale: {x: 0.01, y: 0.010000001, z: 0.010000001}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -6348,6 +6350,91 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!108 &3520776827590474639
+Light:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1112958788274509090}
+  m_Enabled: 1
+  serializedVersion: 10
+  m_Type: 2
+  m_Shape: 0
+  m_Color: {r: 0, g: 0.8876233, b: 1, a: 1}
+  m_Intensity: 0.02
+  m_Range: 0.33
+  m_SpotAngle: 30
+  m_InnerSpotAngle: 21.80208
+  m_CookieSize: 10
+  m_Shadows:
+    m_Type: 0
+    m_Resolution: -1
+    m_CustomResolution: -1
+    m_Strength: 1
+    m_Bias: 0.05
+    m_NormalBias: 0.4
+    m_NearPlane: 0.2
+    m_CullingMatrixOverride:
+      e00: 1
+      e01: 0
+      e02: 0
+      e03: 0
+      e10: 0
+      e11: 1
+      e12: 0
+      e13: 0
+      e20: 0
+      e21: 0
+      e22: 1
+      e23: 0
+      e30: 0
+      e31: 0
+      e32: 0
+      e33: 1
+    m_UseCullingMatrixOverride: 0
+  m_Cookie: {fileID: 0}
+  m_DrawHalo: 0
+  m_Flare: {fileID: 0}
+  m_RenderMode: 0
+  m_CullingMask:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_RenderingLayerMask: 1
+  m_Lightmapping: 4
+  m_LightShadowCasterMode: 0
+  m_AreaSize: {x: 1, y: 1}
+  m_BounceIntensity: 1
+  m_ColorTemperature: 6570
+  m_UseColorTemperature: 0
+  m_BoundingSphereOverride: {x: 0, y: 0, z: 0, w: 0}
+  m_UseBoundingSphereOverride: 0
+  m_UseViewFrustumForShadowCasterCull: 1
+  m_ShadowRadius: 0
+  m_ShadowAngle: 0
+--- !u!114 &471301836889610460
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1112958788274509090}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 474bcb49853aa07438625e644c072ee6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Version: 3
+  m_UsePipelineSettings: 1
+  m_AdditionalLightsShadowResolutionTier: 2
+  m_LightLayerMask: 1
+  m_RenderingLayers: 1
+  m_CustomShadowLayers: 0
+  m_ShadowLayerMask: 1
+  m_ShadowRenderingLayers: 1
+  m_LightCookieSize: {x: 1, y: 1}
+  m_LightCookieOffset: {x: 0, y: 0}
+  m_SoftShadowQuality: 0
 --- !u!1 &1115637265742202959
 GameObject:
   m_ObjectHideFlags: 0
@@ -11782,14 +11869,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 0}
+  m_Color: {r: 1, g: 1, b: 1, a: 0.03529412}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: f36663b5d1148cc48a926afaa7e15b59, type: 3}
+  m_Sprite: {fileID: 21300000, guid: b52ecf99d998e8c469fce9cc2efec3e7, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -11917,6 +12004,8 @@ GameObject:
   - component: {fileID: 2473720063069134346}
   - component: {fileID: 6484199747192538994}
   - component: {fileID: 4150600325296267894}
+  - component: {fileID: 6609952214269687039}
+  - component: {fileID: 4950034419897119718}
   m_Layer: 3
   m_Name: HookSlotRight
   m_TagString: Untagged
@@ -11933,7 +12022,7 @@ Transform:
   m_GameObject: {fileID: 2465073169627865459}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.00292, y: -0.00305, z: -0.00242}
+  m_LocalPosition: {x: -0.00292, y: -0.002928, z: -0.00242}
   m_LocalScale: {x: 0.01, y: 0.010000001, z: 0.010000001}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -12108,6 +12197,91 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!108 &6609952214269687039
+Light:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2465073169627865459}
+  m_Enabled: 1
+  serializedVersion: 10
+  m_Type: 2
+  m_Shape: 0
+  m_Color: {r: 0, g: 0.8876233, b: 1, a: 1}
+  m_Intensity: 0.02
+  m_Range: 0.33
+  m_SpotAngle: 30
+  m_InnerSpotAngle: 21.80208
+  m_CookieSize: 10
+  m_Shadows:
+    m_Type: 0
+    m_Resolution: -1
+    m_CustomResolution: -1
+    m_Strength: 1
+    m_Bias: 0.05
+    m_NormalBias: 0.4
+    m_NearPlane: 0.2
+    m_CullingMatrixOverride:
+      e00: 1
+      e01: 0
+      e02: 0
+      e03: 0
+      e10: 0
+      e11: 1
+      e12: 0
+      e13: 0
+      e20: 0
+      e21: 0
+      e22: 1
+      e23: 0
+      e30: 0
+      e31: 0
+      e32: 0
+      e33: 1
+    m_UseCullingMatrixOverride: 0
+  m_Cookie: {fileID: 0}
+  m_DrawHalo: 0
+  m_Flare: {fileID: 0}
+  m_RenderMode: 0
+  m_CullingMask:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_RenderingLayerMask: 1
+  m_Lightmapping: 4
+  m_LightShadowCasterMode: 0
+  m_AreaSize: {x: 1, y: 1}
+  m_BounceIntensity: 1
+  m_ColorTemperature: 6570
+  m_UseColorTemperature: 0
+  m_BoundingSphereOverride: {x: 0, y: 0, z: 0, w: 0}
+  m_UseBoundingSphereOverride: 0
+  m_UseViewFrustumForShadowCasterCull: 1
+  m_ShadowRadius: 0
+  m_ShadowAngle: 0
+--- !u!114 &4950034419897119718
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2465073169627865459}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 474bcb49853aa07438625e644c072ee6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Version: 3
+  m_UsePipelineSettings: 1
+  m_AdditionalLightsShadowResolutionTier: 2
+  m_LightLayerMask: 1
+  m_RenderingLayers: 1
+  m_CustomShadowLayers: 0
+  m_ShadowLayerMask: 1
+  m_ShadowRenderingLayers: 1
+  m_LightCookieSize: {x: 1, y: 1}
+  m_LightCookieOffset: {x: 0, y: 0}
+  m_SoftShadowQuality: 0
 --- !u!1 &2552032420930668961
 GameObject:
   m_ObjectHideFlags: 0
@@ -17502,7 +17676,7 @@ AudioSource:
     m_Curve:
     - serializedVersion: 3
       time: 0
-      value: 0.635
+      value: 0.278
       inSlope: 0
       outSlope: 0
       tangentMode: 0
@@ -18510,9 +18684,9 @@ AudioSource:
   m_Enabled: 1
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
-  m_audioClip: {fileID: 8300000, guid: 75bcf5c02894e6549ad5bbfee2cf92ca, type: 3}
+  m_audioClip: {fileID: 8300000, guid: 1ea3ab9a526979a4c89e8bead9876129, type: 3}
   m_PlayOnAwake: 1
-  m_Volume: 0.113
+  m_Volume: 0.314
   m_Pitch: 2.37
   Loop: 1
   Mute: 0
@@ -19648,9 +19822,9 @@ AudioSource:
   m_Enabled: 1
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
-  m_audioClip: {fileID: 8300000, guid: 75bcf5c02894e6549ad5bbfee2cf92ca, type: 3}
+  m_audioClip: {fileID: 8300000, guid: 1ea3ab9a526979a4c89e8bead9876129, type: 3}
   m_PlayOnAwake: 1
-  m_Volume: 0.113
+  m_Volume: 0.314
   m_Pitch: 2.37
   Loop: 1
   Mute: 0
@@ -19959,7 +20133,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 100, y: 100}
+  m_SizeDelta: {x: 72.467, y: 70}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &3258548770037683989
 CanvasRenderer:
@@ -19989,7 +20163,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 7e5de6d5fc1078b4aa14ca5692b14a57, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 60fa4f4c3b8e82049ae00a9a0e0ee0d9, type: 3}
   m_Type: 3
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -30049,14 +30223,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 0}
+  m_Color: {r: 1, g: 1, b: 1, a: 0.03529412}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: f36663b5d1148cc48a926afaa7e15b59, type: 3}
+  m_Sprite: {fileID: 21300000, guid: b52ecf99d998e8c469fce9cc2efec3e7, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -35192,7 +35366,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 100, y: 100}
+  m_SizeDelta: {x: 72.467, y: 70}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &2577703726955811548
 CanvasRenderer:
@@ -35222,7 +35396,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 7e5de6d5fc1078b4aa14ca5692b14a57, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 60fa4f4c3b8e82049ae00a9a0e0ee0d9, type: 3}
   m_Type: 3
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -35274,7 +35448,7 @@ AudioSource:
   m_Enabled: 1
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
-  m_audioClip: {fileID: 8300000, guid: cb19081bc05472843b67a053d3383a69, type: 3}
+  m_audioClip: {fileID: 8300000, guid: 25d624c2ca26d6c4889fedad9088da4a, type: 3}
   m_PlayOnAwake: 1
   m_Volume: 0.164
   m_Pitch: 1
@@ -36659,27 +36833,27 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   camera: {fileID: 5891638528082833298}
-  GroundRotationSpeed: 12
-  AirborneRotationSpeed: 6
-  ODM: {fileID: 4524498440742256251}
-  DefaultState: {fileID: 11400000, guid: 0c0f45316779dac40af3102b1e4d2975, type: 2}
-  SlideState: {fileID: 11400000, guid: de9cd6cbdb0acac47825a08e9b6a07d0, type: 2}
-  RecentJumpTimer:
+  groundRotationSpeed: 12
+  airborneRotationSpeed: 6
+  odm: {fileID: 4524498440742256251}
+  defaultState: {fileID: 11400000, guid: 0c0f45316779dac40af3102b1e4d2975, type: 2}
+  slideState: {fileID: 11400000, guid: de9cd6cbdb0acac47825a08e9b6a07d0, type: 2}
+  recentJumpTimer:
     StartEnded: 0
     <MaxValue>k__BackingField: 0
-  OriginalCameraHeight: 1.7
-  CameraSmoothTime: 0.1
-  CameraRoot: {fileID: 8270383438495087053}
-  GroundPoint: {fileID: 2665510635394180367}
-  GroundRadius: 0.3
-  GroundLayers:
+  originalCameraHeight: 1.7
+  cameraSmoothTime: 0.1
+  cameraRoot: {fileID: 8270383438495087053}
+  groundPoint: {fileID: 2665510635394180367}
+  groundRadius: 0.3
+  groundLayers:
     serializedVersion: 2
     m_Bits: 8193
-  Audio: []
-  Particles: []
+  audioSources: []
+  particles: []
   currentSpeed: 0
   animator: {fileID: 4630338804538016313}
-  TargetCameraHeight: 0
+  targetCameraHeight: 0
   slideBoostTimer: 0
 --- !u!114 &4524498440742256251
 MonoBehaviour:
@@ -36739,7 +36913,7 @@ MonoBehaviour:
   maxAngle: 45
   currentSeparation: 0
   enCapacity: 1000
-  currentEN: 1000
+  currentEn: 1000
   enRechargeRate: 100
   enRechargeDelay: 0.5
   dashENCost: 150
@@ -37998,9 +38172,9 @@ AudioSource:
   m_Enabled: 1
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
-  m_audioClip: {fileID: 8300000, guid: 374649e515311e94bae74cac4edd8e52, type: 3}
-  m_PlayOnAwake: 0
-  m_Volume: 1
+  m_audioClip: {fileID: 8300000, guid: 6147dfaf4b338074cbb3eeeab9177524, type: 3}
+  m_PlayOnAwake: 1
+  m_Volume: 0.121
   m_Pitch: 1
   Loop: 0
   Mute: 0
@@ -38310,7 +38484,7 @@ AudioSource:
   m_Enabled: 1
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
-  m_audioClip: {fileID: 8300000, guid: cb19081bc05472843b67a053d3383a69, type: 3}
+  m_audioClip: {fileID: 8300000, guid: 25d624c2ca26d6c4889fedad9088da4a, type: 3}
   m_PlayOnAwake: 1
   m_Volume: 0.164
   m_Pitch: 1

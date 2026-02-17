@@ -48,20 +48,20 @@ namespace Harp.ODMLogic
         public PlayerMotor player;
         public PlayerLook cameralook;
 
-        [Header("Audio Hook Fire")]
+        [Header("audioSources Hook Fire")]
         public List<AudioSource> hookFireAudioSources;
         public List<AudioClip> hookFireAudioClips;
 
-        [Header("Audio Latch and Reel")]
+        [Header("audioSources Latch and Reel")]
         public List<AudioSource> hookReelAudioSources;
         public List<AudioSource> hooksLatchAudioSources;
         public List<float> targetPitch = new List<float>(new[] { 1f, 1f });
         private float _divider;
 
-        [Header("Audio Gas ODM")]
+        [Header("audioSources Gas ODM")]
         public AudioSource gasAudioSource;
 
-        [Header("Audio Dash ODM")]
+        [Header("audioSources Dash ODM")]
         public AudioSource gasDashAudioSource;
 
         [Header("Particles Gas ODM")]
@@ -84,7 +84,7 @@ namespace Harp.ODMLogic
 
         [Header("Logic Dash - EN System")]
         public float enCapacity = 1000f; // Total energy pool
-        public float currentEN = 1000f; // Current energy
+        [FormerlySerializedAs("currentEN")] public float currentEn = 1000f; // Current energy
         public float enRechargeRate = 300f; // EN per second
         public float enRechargeDelay = 0.5f; // Delay after hitting 0 EN
         private float _enRechargeTimer = 0f;
@@ -151,8 +151,10 @@ namespace Harp.ODMLogic
       
         [Header("Animation")]
         [SerializeField] private Animator animator;
+
         private bool _isBoosting;
         private bool _wasBoosting;
+        private bool _isAirDash;
 
         
         
@@ -215,6 +217,7 @@ namespace Harp.ODMLogic
             animator.SetBool(AnimIsReeling, isReeling);
             animator.SetBool(AnimIsOrbiting, isOrbiting);
             animator.SetBool(AnimIsBoosting, _isBoosting);
+           
             
             // Check if sliding (you may need to add this bool parameter to your animator)
             bool isSliding = player.CurrentState == slide;
@@ -247,7 +250,7 @@ namespace Harp.ODMLogic
             if (dashCooldownImage != null)
             {
                 // Show EN gauge
-                dashCooldownImage.fillAmount = currentEN / enCapacity;
+                dashCooldownImage.fillAmount = currentEn / enCapacity;
                 dashCooldownImage.gameObject.SetActive(true);
             }
         }
@@ -338,10 +341,10 @@ namespace Harp.ODMLogic
                 _enRechargeTimer -= Time.deltaTime;
             }
             // Recharge EN when delay is over. 2X speed recharge if grounded
-            else if (currentEN < enCapacity)
+            else if (currentEn < enCapacity)
             {
-                if (player.IsGrounded) currentEN = Mathf.Min(currentEN + enRechargeRate * 2 * Time.deltaTime, enCapacity);
-                else currentEN = Mathf.Min(currentEN + enRechargeRate * Time.deltaTime, enCapacity);
+                if (player.IsGrounded) currentEn = Mathf.Min(currentEn + enRechargeRate * 2 * Time.deltaTime, enCapacity);
+                else currentEn = Mathf.Min(currentEn + enRechargeRate * Time.deltaTime, enCapacity);
                 
                 
             }
@@ -579,7 +582,7 @@ namespace Harp.ODMLogic
             // Dashing - Now uses EN system
             if (!isOrbiting && !isReeling && Input.GetKeyDown(KeyCode.LeftShift))
             {
-                if (_dashTimer <= 0f && currentEN >= dashENCost)
+                if (_dashTimer <= 0f && currentEn >= dashENCost)
                 {
                     PerformAirDash(player.GetWishDir());
                     _dashTimer = dashCooldown;
@@ -684,13 +687,14 @@ namespace Harp.ODMLogic
 
         void PerformAirDash(Vector3 wishDir)
         {
+            
             Vector3 dashDir;
             float strength;
-
+            cameralook.FovBurst(1);
             if (wishDir.magnitude < 0.1f)
             {
                 // No movement input held: Dodge UP (weaker than horizontal for balance)
-                if (animator != null)
+                if (animator != null && !player.IsGrounded)
                 {
                     animator.SetTrigger(AnimDash);
                 }
@@ -702,7 +706,7 @@ namespace Harp.ODMLogic
             else
             {
                 // Movement input(s) held: Dodge horizontally in camera-relative wish direction (supports diagonals naturally)
-                if (animator != null)
+                 if (animator != null && !player.IsGrounded)
                 {
                     animator.SetTrigger(AnimDash);
                 }
@@ -714,12 +718,12 @@ namespace Harp.ODMLogic
             player.Rigidbody.AddForce(dashDir * strength, ForceMode.VelocityChange);
 
             // Consume EN instead of gas
-            currentEN -= dashENCost;
+            currentEn -= dashENCost;
             
             // Check if we hit 0 EN - trigger recharge delay
-            if (currentEN <= 0f)
+            if (currentEn <= 0f)
             {
-                currentEN = 0f;
+                currentEn = 0f;
                 _enRechargeTimer = enRechargeDelay;
             }
 
@@ -777,7 +781,7 @@ namespace Harp.ODMLogic
             }
             if (_isBoosting && !_wasBoosting)
             {
-                if (currentEN < boostENCost)
+                if (currentEn < boostENCost)
                 {
                     _isBoosting = false;
                     return;
@@ -813,12 +817,12 @@ namespace Harp.ODMLogic
                     }
 
                     player.Rigidbody.AddForce(boostDir * boostImpulseForce, ForceMode.Impulse);
-                    currentEN -= boostENCost;
+                    currentEn -= boostENCost;
                     
                     // Check if we hit 0 EN
-                    if (currentEN <= 0f)
+                    if (currentEn <= 0f)
                     {
-                        currentEN = 0f;
+                        currentEn = 0f;
                         _enRechargeTimer = enRechargeDelay;
                     }
                     
@@ -838,11 +842,11 @@ namespace Harp.ODMLogic
                     boostDir = playerCameraTransform.forward.normalized;
                     UseGas(100);
                     player.Rigidbody.AddForce(boostDir * boostImpulseForce, ForceMode.Impulse);
-                    currentEN -= boostENCost;
+                    currentEn -= boostENCost;
                     
-                    if (currentEN <= 0f)
+                    if (currentEn <= 0f)
                     {
-                        currentEN = 0f;
+                        currentEn = 0f;
                         _enRechargeTimer = enRechargeDelay;
                     }
                     
@@ -1173,7 +1177,7 @@ namespace Harp.ODMLogic
             if (flatDir.magnitude < 0.1f) return; // Too close or vertical, skip
 
             Quaternion targetRot = Quaternion.LookRotation(flatDir, Vector3.up);
-            player.Rigidbody.MoveRotation(Quaternion.Slerp(player.Rigidbody.rotation, targetRot, player.GroundRotationSpeed * Time.fixedDeltaTime));
+            player.Rigidbody.MoveRotation(Quaternion.Slerp(player.Rigidbody.rotation, targetRot, player.groundRotationSpeed * Time.fixedDeltaTime));
         }
 
         // =====================================================================================

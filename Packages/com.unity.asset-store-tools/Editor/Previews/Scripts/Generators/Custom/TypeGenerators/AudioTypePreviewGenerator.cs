@@ -48,7 +48,7 @@ namespace AssetStoreTools.Previews.Generators.Custom.TypeGenerators
                 // Skip materials with an error shader
                 if (!IsLoadTypeSupported(audioClip))
                 {
-                    Debug.LogWarning($"Audio clip '{audioClip}' is using a load type which cannot retrieve sample data. Preview will not be generated.");
+                    Debug.LogWarning($"audioSources clip '{audioClip}' is using a load type which cannot retrieve sample data. Preview will not be generated.");
                     continue;
                 }
 

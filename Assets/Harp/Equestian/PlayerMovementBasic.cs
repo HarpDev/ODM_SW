@@ -26,7 +26,7 @@ namespace Player.Movement
             CurrentJumpBuffer = 0f;
             prevDrag = parent.Rigidbody.drag;
             parent.Rigidbody.drag = Drag;
-            parent.TargetCameraHeight = cameraHeight;
+            parent.targetCameraHeight = cameraHeight;
             parent.Height = BodyHeight;
         }
 
@@ -68,7 +68,7 @@ namespace Player.Movement
         public virtual void TryJump(PlayerMotor parent, float speed = -1f)
         {
             parent.CallJumpAnimation();
-            parent.RecentJumpTimer.Reset();
+            parent.recentJumpTimer.Reset();
             CurrentJumpBuffer = 0f;
             SetGravity(parent, speed < 0f ? JumpSpeed : speed);
         }

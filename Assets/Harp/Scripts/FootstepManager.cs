@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class FootstepManager : MonoBehaviour
 {
-    [Header("Audio Settings")]
+    [Header("audioSources Settings")]
     [Tooltip("Array of footstep sounds - one will be chosen randomly")]
     public AudioClip[] footstepSounds;
     

@@ -45,7 +45,7 @@ namespace Player.Movement
 
             if (parent.GetWishDir() != Vector3.zero)
             {
-                float climb = parent.GroundPoint.position.StepClimb(StepHeight, 0.1f, parent.Collider.radius, parent.GroundLayers);
+                float climb = parent.groundPoint.position.StepClimb(StepHeight, 0.1f, parent.Collider.radius, parent.groundLayers);
                 if (climb > 0)
                     parent.transform.position += climb * Vector3.up;
             }

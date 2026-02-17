@@ -1,3 +1,4 @@
+using System.Globalization;
 using Player.Movement;
 using UnityEngine;
 using TMPro;
@@ -21,19 +22,19 @@ public class SpeedManager : MonoBehaviour
 
     [Header("Speed Display Settings")]
     [Tooltip("Speed unit to display (KM/H or M/S)")]
-    public SpeedUnit speedUnit = SpeedUnit.KMH;
+    public SpeedUnit speedUnit = SpeedUnit.Kmh;
 
     [Tooltip("Maximum speed for UI gauge")]
     public float maxSpeedForGauge = 200f;
 
-    [Header("Wind Audio")]
-    [Tooltip("Audio source for wind sound")]
+    [Header("Wind audioSources")]
+    [Tooltip("audioSources source for wind sound")]
     public AudioSource windAudioSource;
 
     [Tooltip("Wind audio clip to play")]
     public AudioClip windClip;
 
-    [Header("Wind Audio Settings")]
+    [Header("Wind audioSources Settings")]
     [Tooltip("Minimum velocity squared magnitude to trigger wind")]
     public float minVelocitySqrMagnitude = 10f;
 
@@ -42,7 +43,7 @@ public class SpeedManager : MonoBehaviour
 
     [Tooltip("Minimum volume at threshold")]
     [Range(0f, 1f)]
-    public float minWindVolume = 0f;
+    public float minWindVolume;
 
     [Tooltip("Maximum volume at max speed")]
     [Range(0f, 1f)]
@@ -65,13 +66,13 @@ public class SpeedManager : MonoBehaviour
 
     [Header("Visual Effects (Future)")]
     [Tooltip("Enable motion blur at high speeds")]
-    public bool useMotionBlur = false;
+    public bool useMotionBlur;
 
     [Tooltip("Enable speed lines at high speeds")]
-    public bool useSpeedLines = false;
+    public bool useSpeedLines;
 
     [Tooltip("Enable screen shake at high speeds")]
-    public bool useScreenShake = false;
+    public bool useScreenShake;
 
     [Header("Speed Threshold Activation")]
     [Tooltip("GameObjects to activate/deactivate based on speed thresholds (in KM/H)")]
@@ -87,10 +88,10 @@ public class SpeedManager : MonoBehaviour
         public float speedThresholdKmh;
     }
 
-    public enum SpeedUnit { KMH, MPS }
+    public enum SpeedUnit { Kmh, Mps }
 
-    private float currentSpeedKmh;
-    private float currentSpeedMps;
+    private float _currentSpeedKmh;
+    private float _currentSpeedMps;
 
     void Start()
     {
@@ -154,9 +155,9 @@ public class SpeedManager : MonoBehaviour
 
     void CalculateSpeed()
     {
-        currentSpeedMps = rb.velocity.magnitude;
-        currentSpeedKmh = currentSpeedMps * 3.6f;
-        currentSpeedKmh = Mathf.Clamp(currentSpeedKmh, 0, maxSpeedForGauge);
+        _currentSpeedMps = rb.velocity.magnitude;
+        _currentSpeedKmh = _currentSpeedMps * 3.6f;
+        _currentSpeedKmh = Mathf.Clamp(_currentSpeedKmh, 0, maxSpeedForGauge);
     }
 
     void UpdateSpeedUI()
@@ -165,18 +166,18 @@ public class SpeedManager : MonoBehaviour
         {
             switch (speedUnit)
             {
-                case SpeedUnit.KMH:
-                    speedText.text = Mathf.Round(currentSpeedKmh).ToString() + " KM/H";
+                case SpeedUnit.Kmh:
+                    speedText.text = Mathf.Round(_currentSpeedKmh).ToString(CultureInfo.InvariantCulture) + " KM/H";
                     break;
-                case SpeedUnit.MPS:
-                    speedText.text = Mathf.Round(currentSpeedMps).ToString() + " M/S";
+                case SpeedUnit.Mps:
+                    speedText.text = Mathf.Round(_currentSpeedMps).ToString(CultureInfo.InvariantCulture) + " M/S";
                     break;
             }
         }
 
         if (speedGaugeImage != null)
         {
-            speedGaugeImage.fillAmount = MapToRange(currentSpeedKmh, 0, maxSpeedForGauge, 0, 1);
+            speedGaugeImage.fillAmount = MapToRange(_currentSpeedKmh, 0, maxSpeedForGauge, 0, 1);
         }
     }
 
@@ -254,7 +255,7 @@ public class SpeedManager : MonoBehaviour
         {
             if (item.targetObject == null) continue;
 
-            bool shouldBeActive = currentSpeedKmh >= item.speedThresholdKmh;
+            bool shouldBeActive = _currentSpeedKmh >= item.speedThresholdKmh;
 
             if (item.targetObject.activeSelf != shouldBeActive)
             {
@@ -268,14 +269,14 @@ public class SpeedManager : MonoBehaviour
         return Mathf.Clamp((value - inMin) / (inMax - inMin) * (outMax - outMin) + outMin, Mathf.Min(outMin, outMax), Mathf.Max(outMin, outMax));
     }
 
-    public float GetSpeedKMH()
+    public float GetSpeedKmh()
     {
-        return currentSpeedKmh;
+        return _currentSpeedKmh;
     }
 
-    public float GetSpeedMPS()
+    public float GetSpeedMps()
     {
-        return currentSpeedMps;
+        return _currentSpeedMps;
     }
 
     public bool IsWindPlaying()
