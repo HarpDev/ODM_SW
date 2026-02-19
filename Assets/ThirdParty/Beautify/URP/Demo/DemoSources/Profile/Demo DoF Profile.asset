@@ -121,7 +121,7 @@ MonoBehaviour:
     m_Value: 1
   saturate:
     m_OverrideState: 1
-    m_Value: 0
+    m_Value: 0.94
   brightness:
     m_OverrideState: 0
     m_Value: 1.05
@@ -457,6 +457,9 @@ MonoBehaviour:
   depthOfFieldTargetFallbackFixedDistance:
     m_OverrideState: 0
     m_Value: 1000
+  depthOfFieldFallbackFadeDuration:
+    m_OverrideState: 0
+    m_Value: 0.5
   depthOfFieldAutofocusViewportPoint:
     m_OverrideState: 0
     m_Value: {x: 0.5, y: 0.5}
@@ -468,6 +471,12 @@ MonoBehaviour:
     m_Value:
       serializedVersion: 2
       m_Bits: 4294967295
+  depthOfFieldFocusPosition:
+    m_OverrideState: 0
+    m_Value: {x: 0, y: 0, z: 0}
+  depthOfFieldPositionFallback:
+    m_OverrideState: 0
+    m_Value: 0
   depthOfFieldDistance:
     m_OverrideState: 0
     m_Value: 10
@@ -692,6 +701,9 @@ MonoBehaviour:
   outlineUsesOptimizedShader:
     m_OverrideState: 0
     m_Value: 0
+  outlineLayerCutOff:
+    m_OverrideState: 0
+    m_Value: 0
   nightVision:
     m_OverrideState: 0
     m_Value: 0
@@ -774,10 +786,31 @@ MonoBehaviour:
   blurIntensity:
     m_OverrideState: 0
     m_Value: 0
+  blurStyle:
+    m_OverrideState: 0
+    m_Value: 0
   blurMask:
     m_OverrideState: 0
     m_Value: {fileID: 0}
     dimension: 1
+  blurCenter:
+    m_OverrideState: 0
+    m_Value: {x: 0.5, y: 0.5}
+  blurTiltShiftWidth:
+    m_OverrideState: 0
+    m_Value: 0.2
+  blurTiltShiftFalloff:
+    m_OverrideState: 0
+    m_Value: 0.2
+  blurRadialBlurRadius:
+    m_OverrideState: 0
+    m_Value: 0.2
+  blurRadialBlurFalloff:
+    m_OverrideState: 0
+    m_Value: 0.35
+  blurDesaturation:
+    m_OverrideState: 0
+    m_Value: 0
   blurKeepSourceOnTop:
     m_OverrideState: 0
     m_Value: 0
@@ -790,6 +823,9 @@ MonoBehaviour:
   blurSourceEdgeBlendStrength:
     m_OverrideState: 0
     m_Value: 20
+  blurShowMask:
+    m_OverrideState: 0
+    m_Value: 0
 --- !u!114 &11400000
 MonoBehaviour:
   m_ObjectHideFlags: 0
