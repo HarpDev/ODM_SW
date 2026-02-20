@@ -63,7 +63,7 @@ MonoBehaviour:
     m_Value: 0
   sharpenIntensity:
     m_OverrideState: 1
-    m_Value: 2.5
+    m_Value: 2.8
   sharpenDepthThreshold:
     m_OverrideState: 0
     m_Value: 0.035
@@ -154,8 +154,8 @@ MonoBehaviour:
     m_Value: {fileID: 0}
     dimension: 1
   bloomIntensity:
-    m_OverrideState: 0
-    m_Value: 0
+    m_OverrideState: 1
+    m_Value: 0.86
   bloomThreshold:
     m_OverrideState: 0
     m_Value: 0.75
@@ -255,11 +255,11 @@ MonoBehaviour:
     m_OverrideState: 0
     m_Value: {r: 1, g: 1, b: 1, a: 1}
   anamorphicFlaresIntensity:
-    m_OverrideState: 0
-    m_Value: 0
+    m_OverrideState: 1
+    m_Value: 0.001
   anamorphicFlaresThreshold:
-    m_OverrideState: 0
-    m_Value: 0.75
+    m_OverrideState: 1
+    m_Value: 0.93
   anamorphicFlaresConservativeThreshold:
     m_OverrideState: 0
     m_Value: 0
@@ -267,8 +267,8 @@ MonoBehaviour:
     m_OverrideState: 0
     m_Value: {r: 0.5, g: 0.5, b: 1, a: 0}
   anamorphicFlaresVertical:
-    m_OverrideState: 0
-    m_Value: 0
+    m_OverrideState: 1
+    m_Value: 1
   anamorphicFlaresSpread:
     m_OverrideState: 0
     m_Value: 1
@@ -302,14 +302,14 @@ MonoBehaviour:
     m_OverrideState: 0
     m_Value: 0
   sunFlaresIntensity:
-    m_OverrideState: 0
-    m_Value: 0
+    m_OverrideState: 1
+    m_Value: 0.176
   sunFlaresTint:
     m_OverrideState: 0
     m_Value: {r: 1, g: 1, b: 1, a: 1}
   sunFlaresSolarWindSpeed:
-    m_OverrideState: 0
-    m_Value: 0.01
+    m_OverrideState: 1
+    m_Value: 0.021
   sunFlaresRotationDeadZone:
     m_OverrideState: 0
     m_Value: 0
@@ -334,8 +334,8 @@ MonoBehaviour:
     m_OverrideState: 0
     m_Value: 30
   sunFlaresSunIntensity:
-    m_OverrideState: 0
-    m_Value: 0.1
+    m_OverrideState: 1
+    m_Value: 0.339
   sunFlaresSunDiskSize:
     m_OverrideState: 0
     m_Value: 0.05
@@ -346,8 +346,8 @@ MonoBehaviour:
     m_OverrideState: 0
     m_Value: 0.13
   sunFlaresCoronaRays1Length:
-    m_OverrideState: 0
-    m_Value: 0.02
+    m_OverrideState: 1
+    m_Value: 0.004
   sunFlaresCoronaRays1Streaks:
     m_OverrideState: 0
     m_Value: 12
@@ -370,8 +370,8 @@ MonoBehaviour:
     m_OverrideState: 0
     m_Value: 0
   sunFlaresGhosts1Size:
-    m_OverrideState: 0
-    m_Value: 0.03
+    m_OverrideState: 1
+    m_Value: 0.069
   sunFlaresGhosts1Offset:
     m_OverrideState: 0
     m_Value: 1.04
@@ -406,17 +406,17 @@ MonoBehaviour:
     m_OverrideState: 0
     m_Value: 0.017
   sunFlaresHaloOffset:
-    m_OverrideState: 0
+    m_OverrideState: 1
     m_Value: 0.22
   sunFlaresHaloAmplitude:
     m_OverrideState: 0
     m_Value: 15.1415
   sunFlaresHaloIntensity:
-    m_OverrideState: 0
-    m_Value: 0.01
+    m_OverrideState: 1
+    m_Value: 0.031
   lensDirtIntensity:
-    m_OverrideState: 0
-    m_Value: 0
+    m_OverrideState: 1
+    m_Value: 0.22
   lensDirtThreshold:
     m_OverrideState: 0
     m_Value: 0.5
@@ -840,3 +840,38 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   components:
   - {fileID: -5548837927502701648}
+  - {fileID: 8169720934255494153}
+--- !u!114 &8169720934255494153
+MonoBehaviour:
+  m_ObjectHideFlags: 3
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 558a8e2b6826cf840aae193990ba9f2e, type: 3}
+  m_Name: ShadowsMidtonesHighlights
+  m_EditorClassIdentifier: 
+  active: 1
+  shadows:
+    m_OverrideState: 1
+    m_Value: {x: 1, y: 1, z: 1, w: -0.27360982}
+  midtones:
+    m_OverrideState: 0
+    m_Value: {x: 1, y: 1, z: 1, w: -0.026478374}
+  highlights:
+    m_OverrideState: 1
+    m_Value: {x: 1, y: 1, z: 1, w: 0.7060901}
+  shadowsStart:
+    m_OverrideState: 0
+    m_Value: 0
+  shadowsEnd:
+    m_OverrideState: 0
+    m_Value: 0.3
+  highlightsStart:
+    m_OverrideState: 0
+    m_Value: 0.55
+  highlightsEnd:
+    m_OverrideState: 0
+    m_Value: 1

@@ -687,7 +687,7 @@ namespace Harp.ODMLogic
 
         void PerformAirDash(Vector3 wishDir)
         {
-            
+            gasDashAudioSource.Play();
             Vector3 dashDir;
             float strength;
             cameralook.FovBurst(1);
